@@ -99,7 +99,7 @@ local function RunCleanupMission(ID, MissionType)
 
     local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
     
-    task.wait(1)
+    task.wait(2)
 
     if TurnInPoint then
         while PlayerUtils:CheckForClosePlayers(TurnInPoint, AUTOFARM_CONFIG.SafeDistance) do
@@ -112,6 +112,8 @@ local function RunCleanupMission(ID, MissionType)
             root.CFrame = TurnInPoint.CFrame * CFrame.new(0, -20, 0)
             PlayerUtils:SpamPrompt(TurnInPrompt, 50)
         end
+    else
+        warn("TurnIn Point not found")
     end
 
     PlayerUtils:Float(false)
@@ -121,6 +123,7 @@ local function RunCleanupMission(ID, MissionType)
         finalRoot.CanCollide = false
         finalRoot.CFrame = AUTOFARM_CONFIG.EndZonePos
     end
+
     print("Mission Cycle Complete")
 end
 
