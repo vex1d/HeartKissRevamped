@@ -23,7 +23,7 @@ end
 
 
 local SelectedMission = nil
-local missionType = AutofarmMissions:Dropdown("Mission Type", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
+local missionType = AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
     SelectedMission = selected
 end)
 
