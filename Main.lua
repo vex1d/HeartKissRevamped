@@ -10,7 +10,6 @@ local function LoadGame()
         for _, id in ids do
             if game.PlaceId == id then
                 require("Games/" .. gameName)
-                break
             end
         end
     end

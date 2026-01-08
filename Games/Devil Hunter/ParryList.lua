@@ -1,4 +1,0 @@
-local ParryIds = {}
-
-
-return ParryIds
