@@ -4,6 +4,8 @@ local PlaceIds = require("PlaceIds")
 
 repeat task.wait() until Players.LocalPlayer ~= nil
 
+print("Loading game...")
+
 local function LoadGame()
     for gameName, ids in PlaceIds do
         for _, id in ids do
