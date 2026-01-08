@@ -75,8 +75,10 @@ function AutoRaids.StartRaid(RaidType: string)
         queue_on_teleport(function()
             AutoRaids.Init()
         end)
+        print("Teleporting to " .. raidPlace)
     else
         AutoRaids.Init()
+        print("Raiding " .. PlaceId)
     end
 end
 
