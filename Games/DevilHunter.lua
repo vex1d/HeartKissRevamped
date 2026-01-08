@@ -1,5 +1,5 @@
 local Players = game:GetService("Players")
-local Lib = require("Utils/Lib")
+local Lib = require("Utils/Library")
 local maid = require("Utils/Maid")
 local ParryTimings = require("Configs/ParryList")
 
