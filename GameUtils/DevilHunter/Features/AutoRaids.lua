@@ -46,9 +46,10 @@ local function AutoYakuzaRaid()
         for _, entity in Entities:GetChildren() do
                 if entity == Character then
                     continue
-                end        
+                end      
 
                 Character:PivotTo(entity:GetPivot() * CFrame.new(0, 0, -2))
+                print("Teleporting to " .. entity.Name)
             end
         end
 
