@@ -1,5 +1,6 @@
 local PlaceIds = {
-    [14339696091] = "UnFair",
+    ["UnFair"] = {},
+    ["Devil Hunter"] = {131079272918660, 136364146980997}
     
 }
 
