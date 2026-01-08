@@ -41,7 +41,7 @@ local function AutoYakuzaRaid()
     end
 
     while true do
-        if #Entities:GetChildren() > 1 then
+        if #Entities:GetChildren() <= 1 then
             local hitbox = Character:FindFirstChild("Hitbox")
             local hb = workspace:GetPartBoundsInBox(hitbox.CFrame, hitbox.Size)
             for _, v in hb do
