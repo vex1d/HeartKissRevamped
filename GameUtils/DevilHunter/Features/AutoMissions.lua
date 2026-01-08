@@ -82,9 +82,12 @@ function Missions.RunCleanup(ID, MissionType)
 
     root.CFrame = AUTOFARM_CONFIG.SafeZonePos * CFrame.new(0, 5, 0)
 
-    task.wait(3)
+    while not MissionAsset:FindFirstChild("TurnIn") do
+        task.wait(1)
+    end
     
     local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
+    
     if TurnInPoint then
         while PlayerUtils:CheckForClosePlayers(TurnInPoint, AUTOFARM_CONFIG.SafeDistance) do
             warn("Player nearby, waiting...")
