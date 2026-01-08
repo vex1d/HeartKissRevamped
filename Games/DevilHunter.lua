@@ -21,7 +21,8 @@ local ConfigsTab = window:Tab("Configs")
 local PlayerSection = MainTab:Section("Main")
 local CombatSection = MainTab:Section("Combat")
 
-local AutofarmMissions = AutoFarm:Section("Autofarm")
+local AutofarmMissions = AutoFarm:Section("Missions")
+local Raidfarm = AutoFarm:Section("Raids")
 
 local SelectedMission = nil
 AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
@@ -37,11 +38,11 @@ AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
 end)
 
 local SelectedRaid = nil
-AutofarmMissions:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse", "Yakuza Infiltration"}, function(selected: string)
+Raidfarm:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse", "Yakuza Infiltration"}, function(selected: string)
     SelectedRaid = selected
 end)
 
-AutofarmMissions:Button("Start Raid", function()
+Raidfarm:Button("Start Raid", function()
     if SelectedRaid then
         RaidsModule.StartRaid(SelectedRaid)
     end
