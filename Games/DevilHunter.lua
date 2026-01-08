@@ -3,7 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Workspace = game:GetService("Workspace")
 local Lib = require("GUI/Library")
-local maid = require("Utils/Maid")
 local PlayerUtils = require("Utils/PlayerUtils")
 
 local ParryTimings = require("GameUtils/DevilHunter/Timings/Timings")
