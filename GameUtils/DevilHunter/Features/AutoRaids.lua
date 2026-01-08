@@ -42,40 +42,36 @@ local function AutoYakuzaRaid()
     end
 
     while true do
-        if #Entities:GetChildren() <= 1 then
-            for _, entity in Entities:GetChildren() do
-                    if entity == Character then
-                        continue
-                    end
-                
-                    Character:PivotTo(entity.HumanoidRootPart.CFrame)
-                end
+    if #Entities:GetChildren() <= 1 then
+        for _, entity in Entities:GetChildren() do
+                if entity == Character then
+                    continue
+                end            
+                Character:PivotTo(entity.HumanoidRootPart.CFrame)
             end
+        end
 
 
-            local hitbox = Character:FindFirstChild("Hitbox")
-            local hb = workspace:GetPartBoundsInBox(hitbox.CFrame, hitbox.Size)
-            for _, v in hb do
-                if v.Parent:FindFirstChild("Humanoid") or v.Parent.Parent:FindFirstChild("Humanoid") then
-                    local isPlayer = Players:GetPlayerFromCharacter(v.Parent)
-                    if isPlayer then
-                        continue
-                    end
-    
-                    local entity = v.Parent
-                    local humanoid = entity:FindFirstChild("Humanoid")
-    
-                    if entity == Character then
-                        continue
-                    end
-    
-                    if humanoid then
-                        humanoid.Health = 0
-                    end
+        local hitbox = Character:FindFirstChild("Hitbox")
+        local hb = workspace:GetPartBoundsInBox(hitbox.CFrame, hitbox.Size)
+        for _, v in hb do
+            if v.Parent:FindFirstChild("Humanoid") or v.Parent.Parent:FindFirstChild("Humanoid") then
+                local isPlayer = Players:GetPlayerFromCharacter(v.Parent)
+                if isPlayer then
+                    continue
+                end
+
+                local entity = v.Parent
+                local humanoid = entity:FindFirstChild("Humanoid")
+
+                if entity == Character then
+                    continue
+                end
+
+                if humanoid then
+                    humanoid.Health = 0
                 end
             end
-        else
-            break
         end
 
         task.wait()
