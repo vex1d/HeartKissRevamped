@@ -42,7 +42,7 @@ end
 EnsureSafePart()
 
 local function RunCleanupMission(ID, MissionType)
-     local args = {
+    local args = {
         "OverworldMissions",
         {
             Identification = ID,
@@ -119,23 +119,30 @@ local function RunCleanupMission(ID, MissionType)
     print("Mission Cycle Complete")
 end
 
-local function ToggleAutoFarm(MissionType: string, Enabled: boolean)
+local AutoFarmEnabled = false 
+local function ToggleAutoFarm(MissionType: string)
     if MissionType == "Cleanup Duty" then
-        while Enabled do
-            local availableMissions = RemoteFunction:InvokeServer("RequestLocationData", {"Cleanup Duty"})
+        task.spawn(function()
+            while AutoFarmEnabled do
+                local availableMissions = RemoteFunction:InvokeServer("RequestLocationData", {"Cleanup Duty"})
 
-            if availableMissions then
-                for Id, MissionType in availableMissions do
-                    RunCleanupMission(Id, MissionType)
-                    break
+                if availableMissions then
+                    for Id, MissionType in availableMissions do
+                        if not AutoFarmEnabled then break end 
+                        
+                        RunCleanupMission(Id, MissionType)
+                        break 
+                    end
+                else
+                    warn("No missions available")
                 end
-            else
-                warn("No missions available")
+            
+                if not AutoFarmEnabled then break end
+                
+                task.wait(AUTOFARM_CONFIG.Timeout)
+                warn("Starting Next Mission...")
             end
-           
-            task.wait(AUTOFARM_CONFIG.Timeout)
-            warn("Starting Next Mission...")
-        end
+        end)
     end
 end
 

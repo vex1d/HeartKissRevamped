@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local lPlayer = Players.LocalPlayer
 local PlayerUtils = {}
 
-function PlayerUtils:SpamPrompts(prompt: ProximityPrompt, attempts: number, delay: number)
+function PlayerUtils:SpamPrompt(prompt: ProximityPrompt, attempts: number, delay: number)
     if not prompt then return end
     
     for i = 1, attempts do
