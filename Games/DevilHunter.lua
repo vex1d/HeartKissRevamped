@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local Workspace = game:GetService("Workspace")
 local Lib = require("GUI/Library")
 local maid = require("Utils/Maid")
@@ -42,6 +43,9 @@ end
 EnsureSafePart()
 
 local function RunCleanupMission(ID, MissionType)
+    local root = PlayerUtils:GetRoot()
+    root.CFrame = CFrame.new(-1075.9, 292.1, -585.9)
+
     local args = {
         "OverworldMissions",
         {
@@ -61,7 +65,6 @@ local function RunCleanupMission(ID, MissionType)
         return 
     end
 
-    local root = PlayerUtils:GetRoot()
     local arrived = false
     
     local startWait = tick()
