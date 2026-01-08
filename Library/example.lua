@@ -1,81 +1,48 @@
-local lib = require(game.ReplicatedStorage.UILibrary2)
+local Library = loadstring(game:HttpGet("https://gist.githubusercontent.com/vex1d/40db7f0824aa3b8c54a8dc311fe8bdd1/raw/b5a53d827bb5df0a3e7293b5299bec20a793fc90/HeartKissUILib"))()
 
-local window = lib.new("Heartkiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
+-- 1. Create Window
+local Window = Library.new("Heartkiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
 
-local Tab = window:Tab("Main")
-local SettingsTab = window:Tab("Settings")
+-- 2. Create Tabs
+local MainTab = Window:Tab("Main")
+local SettingsTab = Window:Tab("Settings")
 
-local FunSection = Tab:Section("Fun Features")
-local aimbotTab = Tab:Section("Players")
-local SettingsSection = Tab:Section("UI Settings")
+-- 3. Create Sections (The Groups)
+local MainSection = MainTab:Section("Showcase")
+local ConfigSection = SettingsTab:Section("Configuration")
 
-local ConfigSection = SettingsTab:Section("Config")
+-- [[ EXAMPLES OF EVERY ELEMENT ]] --
 
-SettingsTab:CreateConfig({
-    List = {"Legit", "Rage", "HvH"},
-    Input = function(text)
-        print("User typed:", text)
-    end,
-    Dropdown = function(selected)
-        print("User selected:", selected)
-    end,
-    Load = function()
-        print("Load clicked!")
-    end,
-    Save = function()
-        print("Save clicked!")
-    end,
-    Create = function()
-        print("Create clicked!")
-    end,
-    Delete = function()
-        print("Delete clicked!")
-    end
-})
+MainSection:Label("Interactable Elements")
 
-aimbotTab:Button("Kill All", function() end)
-aimbotTab:Dropdown("Target-Part", {"Head", "Torso", "Left Arm", "Right Arm"}, function(option: string)
-    print(option)
+MainSection:Button("Button Example", function()
+    print("Button Clicked!")
 end)
 
-aimbotTab:Toggle("Auto Aim", function(state: boolean)
+MainSection:Toggle("Toggle Example", function(state)
+    print("Toggle State:", state)
+end)
+
+MainSection:Slider("Slider Example", 1, 100, 50, function(value)
+    print("Slider Value:", value)
+end)
+
+MainSection:Dropdown("Dropdown Example", {"Option A", "Option B", "Option C"}, function(selected)
+    print("Dropdown Selected:", selected)
+end)
+
+MainSection:ColorPicker("Color Picker", Color3.fromRGB(170, 0, 255), function(color)
+    print("New Color:", color)
+end)
+
+MainSection:Bind("Keybind Example", Enum.KeyCode.E, function()
+    print("Keybind Pressed!")
+end)
+
+MainSection:ToggleBind("Toggle bind", Enum.KeyCode.R, function(state)
     print(state)
 end)
 
-aimbotTab:ToggleBind("Rapid Fire", Enum.KeyCode.R, function(enabled)
-    print(enabled)
+MainSection:Input("Input Box", "Type something...", function(text)
+    print("User Typed:", text)
 end)
-
-aimbotTab:Button("Anti-Flash", function() end)
-aimbotTab:Slider("FOV", 1, 100, 10, function(value: number)
-    print(value)
-end)
-
-aimbotTab:ColorPicker("ESP Color", Color3.fromRGB(255, 0, 0), function(color: Color3)
-    print(color)
-end)
-
-aimbotTab:Button("Anti-Gravity", function() end)
-
-FunSection:Label("Fun Features!!!")
-FunSection:Input("Input", "Placeholder", function(value: string)
-    print(value)
-end)
-FunSection:Button("Explode All", function() end)
-FunSection:Dropdown("Explosion Part", {"Head", "Torso", "Left Arm", "Right Arm"}, function(option: string)
-
-end)
-FunSection:Button("Rainbow Character", function() end)
-FunSection:Slider("Walkspeed", 1, 10, 0, function(value: number)
-    
-end)
-
-FunSection:Bind("Bind", Enum.KeyCode.E, function()
-    print("pressed")
-end)
-
-FunSection:Toggle("Infinite Jump", function(state: boolean)
-    print(state)
-end)
-FunSection:Button("Giant Character", function() end)
-FunSection:Button("Tiny Character", function() end)

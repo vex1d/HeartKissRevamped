@@ -6,6 +6,12 @@ local UserInputService = game:GetService("UserInputService")
 local Library = {}
 Library.__index = Library
 
+if not getgenv().connections then
+    getgenv().connections = {}
+end
+
+local connections = getgenv().connections
+
 local THEMES = {
     MainColor = Color3.fromRGB(30, 30, 30),
     FrameColor = Color3.fromRGB(25, 25, 25),
@@ -46,6 +52,17 @@ function Library.new(Name: string, Size: UDim2, KeyBind: Enum.UserInputType | En
     self.Tabs = {}
     self.KeyBind = KeyBind or Enum.KeyCode.RightControl
 
+    if game.CoreGui:FindFirstChild(Name) then
+        game.CoreGui:FindFirstChild(Name):Destroy()
+        for _, con in connections do
+            if con and con.Disconnect then
+                con:Disconnect()
+                con = nil
+                -- print(con)
+            end
+        end
+    end
+
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = Name
     
@@ -54,8 +71,8 @@ function Library.new(Name: string, Size: UDim2, KeyBind: Enum.UserInputType | En
     elseif protectgui then
         protectgui(ScreenGui)
     end
-
-        ScreenGui.Parent = game.CoreGui
+    
+    ScreenGui.Parent = game.CoreGui
 
     local MainFrame = Instance.new("Frame")
     local Frame = Instance.new("Frame")
@@ -228,7 +245,8 @@ function  Library:Tab(text: string)
     LeftList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(UpdateCanvas)
     RightList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(UpdateCanvas)
 
-    Tab.MouseButton1Click:Connect(function()
+    
+    local con = Tab.MouseButton1Click:Connect(function()
         for _, tab in self.Tabs do
             tab.Page.Visible = false
             tab.Button.BackgroundColor3 = THEMES.TabColor
@@ -237,6 +255,7 @@ function  Library:Tab(text: string)
         Page.Visible = true
         Tab.BackgroundColor3 = THEMES.SelectedTab
     end)
+    table.insert(connections, con)
 
     if #self.Tabs == 0 then
         Page.Visible = true
@@ -302,11 +321,12 @@ function  Library:Tab(text: string)
             Btn.LayoutOrder = ElementCount
             Btn.Parent = Container
 
-            Btn.MouseButton1Click:Connect(function()
+            local con = Btn.MouseButton1Click:Connect(function()
                 callback()
                 local old = Btn.BorderColor3
                 task.wait(0.1)
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:Toggle(text: string, callback: () -> ())
@@ -341,7 +361,7 @@ function  Library:Tab(text: string)
             Label.TextSize = 12
             Label.Parent = ToggleBtn
 
-            ToggleBtn.MouseButton1Click:Connect(function()
+            local con = ToggleBtn.MouseButton1Click:Connect(function()
                 enabled = not enabled
                 callback(enabled)
                 if enabled then
@@ -350,6 +370,7 @@ function  Library:Tab(text: string)
                     TweenService:Create(CheckMark, TweenInfo.new(0.2), {BackgroundColor3 = THEMES.FrameColor}):Play()
                 end
             end)
+            table.insert(connections, con)
         end
         
         function SectionFunctions:Dropdown(text: string, options: table, callback: () -> ())
@@ -406,16 +427,17 @@ function  Library:Tab(text: string)
                 OptBtn.Parent = OptionContainer
                 CreateGradient(OptBtn)
                 
-                OptBtn.MouseButton1Click:Connect(function()
+                local con = OptBtn.MouseButton1Click:Connect(function()
                     Title.Text = text .. " : " .. opt
                     isDropped = false
                     Icon.Text = "+"
                     TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                     callback(opt)
                 end)
+                table.insert(connections, con)
             end
 
-            Header.MouseButton1Click:Connect(function()
+            local con = Header.MouseButton1Click:Connect(function()
                 isDropped = not isDropped
                 if isDropped then
                     Icon.Text = "-"
@@ -426,6 +448,7 @@ function  Library:Tab(text: string)
                     TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                 end
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:Label(text: string)
@@ -505,22 +528,24 @@ function  Library:Tab(text: string)
                 callback(NewValue)
             end
 
-            SlideBar.InputBegan:Connect(function(input)
+            local con = SlideBar.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     dragging = true
                     Update(input)
                 end
             end)
+            table.insert(connections, con)
             
-            UserInputService.InputEnded:Connect(function(input)
+           local con = UserInputService.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
             end)
             
-            UserInputService.InputChanged:Connect(function(input)
+            local con =UserInputService.InputChanged:Connect(function(input)
                 if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
                     Update(input)
                 end
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:Bind(text: string, defaultKey: Enum.KeyCode, callback: () -> ())
@@ -558,13 +583,14 @@ function  Library:Tab(text: string)
             BindBtn.Parent = KeybindFrame
             CreateGradient(BindBtn)
 
-            BindBtn.MouseButton1Click:Connect(function()
+            local con = BindBtn.MouseButton1Click:Connect(function()
                 isBinding = true
                 BindBtn.Text = "[...]"
                 BindBtn.BorderColor3 = THEMES.LineColor
             end)
+            table.insert(connections, con)
 
-            UserInputService.InputBegan:Connect(function(input, processed)
+            local con = UserInputService.InputBegan:Connect(function(input, processed)
                 if isBinding then
                     if input.UserInputType == Enum.UserInputType.Keyboard then
                         isBinding = false
@@ -582,6 +608,7 @@ function  Library:Tab(text: string)
                      callback()
                 end
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:ToggleBind(text: string, defaultKey: Enum.KeyCode, callback: () -> ())
@@ -621,13 +648,14 @@ function  Library:Tab(text: string)
             BindBtn.Parent = KeybindFrame
             CreateGradient(BindBtn)
 
-            BindBtn.MouseButton1Click:Connect(function()
+            local con = BindBtn.MouseButton1Click:Connect(function()
                 isBinding = true
                 BindBtn.Text = "[...]"
                 BindBtn.BorderColor3 = THEMES.LineColor
             end)
+            table.insert(connections, con)
 
-            UserInputService.InputBegan:Connect(function(input, processed)
+            local con = UserInputService.InputBegan:Connect(function(input, processed)
                 if isBinding then
                     if input.UserInputType == Enum.UserInputType.Keyboard then
                         isBinding = false
@@ -652,6 +680,7 @@ function  Library:Tab(text: string)
                     end
                 end
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:Input(text: string, placeholder: string, callback: () -> ())
@@ -689,13 +718,14 @@ function  Library:Tab(text: string)
             InputBox.Parent = InputFrame
             CreateGradient(InputBox)
 
-            InputBox.FocusLost:Connect(function()
+            local con = InputBox.FocusLost:Connect(function()
                 callback(InputBox.Text)
                 local old = InputBox.BorderColor3
                 InputBox.BorderColor3 = THEMES.LineColor
                 task.wait(0.1)
                 InputBox.BorderColor3 = old
             end)
+            table.insert(connections, con)
         end
 
         function SectionFunctions:CreateButtonRow(text1: string, callback1: () -> (), text2: string, callback2: () -> ())
@@ -723,14 +753,16 @@ function  Library:Tab(text: string)
             Btn2.Parent = RowFrame
             CreateGradient(Btn2)
 
-            Btn1.MouseButton1Click:Connect(function()
+            local con1 = Btn1.MouseButton1Click:Connect(function()
                 callback1()
                 local old = Btn1.BorderColor3
             end)
+            table.insert(connections, con1)
 
-            Btn2.MouseButton1Click:Connect(function()
+            local con2 = Btn2.MouseButton1Click:Connect(function()
                 callback2()
             end)
+            table.insert(connections, con2)
         end
 
         function SectionFunctions:ColorPicker(text, defaultColor, callback)
@@ -883,35 +915,39 @@ function  Library:Tab(text: string)
             SVCursor.Position = UDim2.new(1-s, -2, 1-v, -2)
             HueCursor.Position = UDim2.new(0, 0, 1-h, 0)
 
-            SVBox.InputBegan:Connect(function(input)
+            local con1 = SVBox.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     draggingSV = true
                     UpdateSV(input)
                 end
             end)
+            table.insert(connections, con1)
             
-            HueBar.InputBegan:Connect(function(input)
+            local con2 = HueBar.InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     draggingHue = true
                     UpdateHue(input)
                 end
             end)
+            table.insert(connections, con2)
 
-            UserInputService.InputChanged:Connect(function(input)
+            local con3 = UserInputService.InputChanged:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseMovement then
                     if draggingSV then UpdateSV(input) end
                     if draggingHue then UpdateHue(input) end
                 end
             end)
+            table.insert(connections, con3)
 
-            UserInputService.InputEnded:Connect(function(input)
+            local con4 = UserInputService.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     draggingSV = false
                     draggingHue = false
                 end
             end)
+            table.insert(connections, con4)
 
-            Header.MouseButton1Click:Connect(function()
+            local con = Header.MouseButton1Click:Connect(function()
                 isOpen = not isOpen
                 if isOpen then
                     TweenService:Create(PickerFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 180)}):Play()
@@ -919,6 +955,7 @@ function  Library:Tab(text: string)
                     TweenService:Create(PickerFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                 end
             end)
+            table.insert(connections, con)
         end
 
         return SectionFunctions
