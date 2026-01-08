@@ -17,6 +17,8 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Autofarm")
 local missionType = AutofarmMissions:Dropdown("Mission Type", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"})
 
+
+
 local function  AutoParry()
 
 end
