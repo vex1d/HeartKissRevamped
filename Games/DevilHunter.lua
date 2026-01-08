@@ -9,6 +9,7 @@ local PlayerUtils = require("Utils/PlayerUtils")
 local ParryTimings = require("GameUtils/DevilHunter/Timings/Timings")
 local AUTOFARM_CONFIG = require("GameUtils/DevilHunter/Configs/AutofarmConfig")
 local MissionsModule = require("GameUtils/DevilHunter/Features/AutoMissions")
+local RaidsModule = require("GameUtils/DevilHunter/Features/AutoRaids")
 
 local window = Lib.new("HeartKiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
 
@@ -24,7 +25,7 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Autofarm")
 
 local SelectedMission = nil
-local missionType = AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
+AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
     SelectedMission = selected
 end)
 
@@ -33,5 +34,18 @@ AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
     
     if state and SelectedMission then
         MissionsModule.StartLoop(SelectedMission)
+    end
+end)
+
+local SelectedRaid = nil
+AutofarmMissions:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse", "Yakuza Infiltration"}, function(selected: string)
+    SelectedRaid = selected
+end)
+
+AutofarmMissions:Button("Start Raid", function(state)
+    RaidsModule.AutoRaidsEnabled = state
+    
+    if state and SelectedRaid then
+        RaidsModule.StartRaid(SelectedRaid)
     end
 end)
