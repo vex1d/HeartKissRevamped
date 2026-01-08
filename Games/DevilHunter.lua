@@ -122,6 +122,7 @@ end
 local AutoFarmEnabled = false 
 local function ToggleAutoFarm(MissionType: string)
     if MissionType == "Cleanup Duty" then
+        print("Starting Cleanup Duty Autofarm...")
         task.spawn(function()
             while AutoFarmEnabled do
                 local availableMissions = RemoteFunction:InvokeServer("RequestLocationData", {"Cleanup Duty"})
@@ -131,6 +132,7 @@ local function ToggleAutoFarm(MissionType: string)
                         if not AutoFarmEnabled then break end 
                         
                         RunCleanupMission(Id, MissionType)
+
                         break 
                     end
                 else
