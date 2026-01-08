@@ -19,6 +19,7 @@ local AutoRaids = {}
 AutoRaids.AutoRaidsEnabled = false
 
 local function AutoYakuzaRaid()
+    print("Starting Yakuza Raid...")
     local Character = lplayer.Character
 
     if not Character:FindFirstChild("Hitbox") then 
@@ -43,11 +44,10 @@ local function AutoYakuzaRaid()
     while true do
         if #Entities:GetChildren() <= 1 then
             for _, entity in Entities:GetChildren() do
-                if entity:IsA("Model") and entity:FindFirstChild("Humanoid") then
                     if entity == Character then
                         continue
                     end
-                    
+                
                     Character:PivotTo(entity.HumanoidRootPart.CFrame)
                 end
             end
