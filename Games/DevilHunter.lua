@@ -153,8 +153,10 @@ local missionType = AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold 
 end)
 
 AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
-    if SelectedMission then
-        ToggleAutoFarm(SelectedMission, state)
+    AutoFarmEnabled = state 
+    
+    if state and SelectedMission then
+        ToggleAutoFarm(SelectedMission)
     end
 end)
 
