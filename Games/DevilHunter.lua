@@ -23,13 +23,6 @@ local CombatSection = MainTab:Section("Combat")
 
 local AutofarmMissions = AutoFarm:Section("Autofarm")
 
-local lPlayer = Players.LocalPlayer
-local Files = ReplicatedStorage:WaitForChild("Files")
-local Framework = Files:WaitForChild("Framework")
-local RemoteFunction = Framework.Network:WaitForChild("RemoteFunction")
-local CleanupDutyFolder = Workspace.World.Missions:WaitForChild("Cleanup Duty")
-
-
 local SelectedMission = nil
 local missionType = AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
     SelectedMission = selected
