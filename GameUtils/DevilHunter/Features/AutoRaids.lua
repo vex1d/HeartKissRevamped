@@ -2,10 +2,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
 
--- Corrected Table: We need to look up ID by Name
 local RaidData = {
     ["Yakuza Infiltration"] = 136364146980997,
-    -- ["Mysterious Hotel"] = 123456789, 
 }
 
 local lplayer = Players.LocalPlayer
@@ -90,7 +88,7 @@ function AutoRaids.StartRaid(RaidName: string)
 
     if game.PlaceId == TargetPlaceId then
         print("Already in raid, initializing...")
-        AutoRaids.Init()
+        -- AutoRaids.Init()
     else
         print("Teleporting to " .. RaidName .. " (" .. TargetPlaceId .. ")")
         
