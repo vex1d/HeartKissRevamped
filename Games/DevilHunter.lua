@@ -25,10 +25,10 @@ local function  AutoParry()
 end
 
 
-local function  AutofarmCleanup()
+-- local function  AutofarmCleanup()
     
-end
+-- end
 
-for _, player in Players:GetPlayers() do
+-- for _, player in Players:GetPlayers() do
     
-end
+-- end
