@@ -95,10 +95,9 @@ local function RunCleanupMission(ID, MissionType)
     PlayerUtils:SpamPrompt(TPrompt, AUTOFARM_CONFIG.InteractAttempts)
 
     root.CFrame = AUTOFARM_CONFIG.SafeZonePos * CFrame.new(0, 5, 0)
-    task.wait(1.5)
+    -- task.wait(1.5)
 
-    
-    task.wait(2)
+    task.wait(3)
     
     local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
     if TurnInPoint then
