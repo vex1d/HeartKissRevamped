@@ -1,0 +1,5 @@
+local Latency = {}
+
+
+
+return Latency
