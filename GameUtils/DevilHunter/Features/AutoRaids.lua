@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
+
 local PlaceIds = {
     [136364146980997] = "Yakuza Infiltration",
 }

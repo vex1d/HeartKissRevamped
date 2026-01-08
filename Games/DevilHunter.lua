@@ -42,10 +42,10 @@ AutofarmMissions:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse"
     SelectedRaid = selected
 end)
 
-AutofarmMissions:Button("Start Raid", function(state)
-    RaidsModule.AutoRaidsEnabled = state
+AutofarmMissions:Button("Start Raid", function()
+    RaidsModule.AutoRaidsEnabled = true
     
-    if state and SelectedRaid then
+    if SelectedRaid then
         RaidsModule.StartRaid(SelectedRaid)
     end
 end)
