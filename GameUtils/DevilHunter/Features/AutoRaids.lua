@@ -46,8 +46,9 @@ local function AutoYakuzaRaid()
         for _, entity in Entities:GetChildren() do
                 if entity == Character then
                     continue
-                end            
-                Character:PivotTo(entity.HumanoidRootPart.CFrame)
+                end        
+
+                Character:PivotTo(entity:GetPivot() * CFrame.new(0, 0, -2))
             end
         end
 
