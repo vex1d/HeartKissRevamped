@@ -41,19 +41,24 @@ local function AutoYakuzaRaid()
         weld.Parent = hitbox
     end
 
-    while true do
-    if #Entities:GetChildren() <= 1 then
-        for _, entity in Entities:GetChildren() do
-                if entity == Character then
-                    continue
-                end      
-
-                Character:PivotTo(entity:GetPivot() * CFrame.new(0, 0, -2))
-                print("Teleporting to " .. entity.Name)
+    task.spawn(function()
+        while true do
+            if #Entities:GetChildren() > 1 then
+                for _, entity in Entities:GetChildren() do
+                    if entity == Character then
+                        continue
+                    end
+    
+                    Character:PivotTo(entity:GetPivot() * CFrame.new(0, 0, -2))
+                end
+            else
+                break
             end
         end
+    end)
 
 
+    while true do
         local hitbox = Character:FindFirstChild("Hitbox")
         local hb = workspace:GetPartBoundsInBox(hitbox.CFrame, hitbox.Size)
         for _, v in hb do
