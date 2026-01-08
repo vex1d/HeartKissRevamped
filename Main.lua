@@ -1,9 +1,8 @@
+local Players = game:GetService("Players")
 local Services = require("Utils/Services")
 local PlaceIds = require("PlaceIds")
 
-if not game.Loaded then
-    game.Loaded:Wait()
-end
+repeat task.wait() until Players.LocalPlayer ~= nil
 
 local function LoadGame()
     for gameName, ids in PlaceIds do
