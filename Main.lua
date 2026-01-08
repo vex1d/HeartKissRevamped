@@ -11,7 +11,7 @@ local function LoadGame()
         for _, id in ids do
             if game.PlaceId == id then
                 require("Games/" .. gameName)
-                print(gameName)
+                -- print(gameName)
             else
                 warn("Game not loaded: " .. gameName)    
             end
