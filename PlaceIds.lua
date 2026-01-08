@@ -1,3 +1,4 @@
 local PlaceIds = {
-    UnFair = 14339696091,
+    [14339696091] = "UnFair",
+    
 }
