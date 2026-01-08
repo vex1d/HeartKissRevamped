@@ -16,9 +16,11 @@ local function LoadGame()
     end
 end
 
-local success, err = pcall(LoadGame)
-if not success then
+local success, info = pcall(LoadGame)
+if success then
+    print("Game Loaded")    
+else
     warn("CRITICAL: Failed to load game module.")
-    warn(err)
+    warn(info)
 end
 
