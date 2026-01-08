@@ -27,6 +27,7 @@ local function gitRequire(path)
     env.require = gitRequire
     setfenv(func, env)
 
+    
     return func()
 end
 
