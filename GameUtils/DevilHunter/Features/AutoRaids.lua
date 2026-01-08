@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
 
 local PlaceIds = {
@@ -9,6 +10,10 @@ local lplayer = Players.LocalPlayer
 local Entities = workspace.World.Entities
 local Map = workspace.Map
 
+local Files = ReplicatedStorage.Files
+local Framework = Files.Framework
+local Network = Framework.Network
+local RemoteEvent = Network.RemoteEvent
 
 local AutoRaids = {}
 AutoRaids.AutoRaidsEnabled = false
@@ -86,6 +91,8 @@ end
 function AutoRaids.Init()
     local PlaceId = PlaceIds[game.PlaceId]
     AutoRaids.AutoRaidsEnabled = true
+
+    RemoteEvent:FireServer("Event", {Name = "WeaponInteract"})
 
     if PlaceId == "Yakuza Infiltration" then
         AutoYakuzaRaid()
