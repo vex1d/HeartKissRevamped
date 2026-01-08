@@ -15,9 +15,23 @@ local PlayerSection = MainTab:Section("Main")
 local CombatSection = MainTab:Section("Combat")
 
 local AutofarmMissions = AutoFarm:Section("Autofarm")
-local missionType = AutofarmMissions:Dropdown("Mission Type", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"})
 
-print("Devil hunter game loaded")
+
+local function ToggleAutoFarm(MissionType: string, Enabled: boolean)
+    print(MissionType, Enabled)
+end
+
+
+local SelectedMission = nil
+local missionType = AutofarmMissions:Dropdown("Mission Type", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
+    SelectedMission = selected
+end)
+
+AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
+    if SelectedMission then
+        ToggleAutoFarm(SelectedMission, state)
+    end
+end)
 
 
 local function  AutoParry()
