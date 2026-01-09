@@ -9,6 +9,7 @@ local ParryTimings = require("GameUtils/DevilHunter/Timings/Timings")
 local AUTOFARM_CONFIG = require("GameUtils/DevilHunter/Configs/AutofarmConfig")
 local MissionsModule = require("GameUtils/DevilHunter/Features/AutoMissions")
 local RaidsModule = require("GameUtils/DevilHunter/Features/AutoRaids")
+local CombatModule = require("GameUtils/DevilHunter/Features/Combat")
 
 local window = Lib.new("HeartKiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
 
@@ -23,6 +24,40 @@ local CombatSection = MainTab:Section("Combat")
 
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
+
+local WeaponType = CombatModule.GetWeaponType()
+local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
+
+local SelectedSkills = {
+    Slot1 = nil,
+    Slot2 = nil,
+    Slot3 = nil
+}
+
+local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. WeaponType.Value)
+WeaponType.Changed:Connect(function()
+    weaponTypeLabel.Text = "Current Weapon: " .. WeaponType.Value
+end)
+
+CombatSection:Bind("ForceSkill1", Enum.KeyCode.C, function()
+    if SelectedSkills.Slot1 then
+        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+    end
+end)
+
+CombatSection:Bind("ForceSkill2", Enum.KeyCode.V, function()
+    if SelectedSkills.Slot2 then
+        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+    end
+end)
+
+CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
+    if SelectedSkills.Slot3 then
+        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+    end
+end)
+
+
 
 local SelectedMission = nil
 AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)

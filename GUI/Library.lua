@@ -465,6 +465,8 @@ function  Library:Tab(text: string)
             Label.TextSize = 12
             Label.LayoutOrder = ElementCount 
             Label.Parent = Container
+
+            return Label
         end
 
        function SectionFunctions:Slider(text: string, min: number, max: number, default: number, callback: () -> ())
