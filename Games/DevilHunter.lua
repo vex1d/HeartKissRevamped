@@ -25,6 +25,7 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
+print("Loading Devil Hunter")
 local WeaponType = CombatModule.GetWeaponType()
 local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
 
@@ -33,6 +34,7 @@ local SelectedSkills = {
     Slot2 = nil,
     Slot3 = nil
 }
+
 
 local currentWeaponName = (WeaponType and WeaponType.Value) or "Loading..."
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
