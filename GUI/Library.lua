@@ -375,9 +375,9 @@ function  Library:Tab(text: string)
         
         function SectionFunctions:Dropdown(text: string, options: table, callback: () -> ())
             ElementCount = ElementCount + 1 
-
             callback = callback or function() end
             local isDropped = false
+            local dropdownOptions = options
 
             local DropFrame = Instance.new("Frame")
             DropFrame.Size = UDim2.new(1, 0, 0, 30)
@@ -421,34 +421,51 @@ function  Library:Tab(text: string)
             OptionLayout.Padding = UDim.new(0, 2)
             OptionLayout.Parent = OptionContainer
 
-            for _, opt in options do
-                local OptBtn = CreateButton()
-                OptBtn.Text = opt
-                OptBtn.Parent = OptionContainer
-                CreateGradient(OptBtn)
+            local function BuildOptions(newOptions)
+                for _, child in OptionContainer:GetChildren() do
+                    if child:IsA("TextButton") then
+                        child:Destroy()
+                    end
+                end
+
+                dropdownOptions = newOptions 
                 
-                local con = OptBtn.MouseButton1Click:Connect(function()
-                    Title.Text = text .. " : " .. opt
-                    isDropped = false
-                    Icon.Text = "+"
-                    TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
-                    callback(opt)
-                end)
-                table.insert(connections, con)
+                for _, opt in dropdownOptions do
+                    local OptBtn = CreateButton()
+                    OptBtn.Text = opt
+                    OptBtn.Parent = OptionContainer
+                    CreateGradient(OptBtn)
+                    
+                    OptBtn.MouseButton1Click:Connect(function()
+                        Title.Text = text .. " : " .. opt
+                        isDropped = false
+                        Icon.Text = "+"
+                        TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
+                        callback(opt)
+                    end)
+                end
             end
 
-            local con = Header.MouseButton1Click:Connect(function()
+            BuildOptions(options)
+
+            Header.MouseButton1Click:Connect(function()
                 isDropped = not isDropped
                 if isDropped then
                     Icon.Text = "-"
-                    local openHeight = 30 + (#options * 22) + 5
+                    local openHeight = 30 + (#dropdownOptions * 22) + 5
                     TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, openHeight)}):Play()
                 else
                     Icon.Text = "+"
                     TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                 end
             end)
-            table.insert(connections, con)
+
+            local DropdownObject = {}
+            function DropdownObject:Refresh(newList)
+                BuildOptions(newList)
+            end
+            
+            return DropdownObject
         end
 
         function SectionFunctions:Label(text: string)

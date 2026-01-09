@@ -25,8 +25,6 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
-print(CombatModule.GetSkills())
-
 local AllSkills = CombatModule.GetSkills()
 local KatanaSkills = AllSkills.Katana
 local FistSkills = AllSkills.Fist
@@ -45,22 +43,38 @@ local currentWeaponName = "None"
 if WeaponType then
     currentWeaponName = WeaponType.Value
 end
+local activeSkills = CombatModule.GetCurrentSkillList()
 
-local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
-
-if WeaponType then
-    WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
-        weaponTypeLabel.Text = "Current Weapon: " .. tostring(WeaponType.Value)
-    end)
-end
-
-CombatSection:Dropdown("Skill Slot 1", KatanaSkills, function(selected)
+local Slot1Dropdown = CombatSection:Dropdown("Skill Slot 1", KatanaSkills, function(selected)
     SelectedSkills.Slot1 = selected
 end)
 
-CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
+local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
     SelectedSkills.Slot2 = selected
 end)
+
+local function UpdateSkillDropdowns()
+    local wep = WeaponType and WeaponType.Value or "None"
+    local newList = MiscSkills -- Default
+    
+    if wep == "Katana" then newList = KatanaSkills
+    elseif wep == "Fist" then newList = FistSkills
+    elseif wep == "Dagger" then newList = DaggerSkills
+    elseif wep == "FireArm" then newList = FireArmSkills
+    end
+    
+    Slot1Dropdown:Refresh(newList)
+    Slot2Dropdown:Refresh(newList)
+end
+
+local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
+if WeaponType then
+    WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
+        weaponTypeLabel.Text = "Current Weapon: " .. tostring(WeaponType.Value)
+        UpdateSkillDropdowns()
+    end)
+end
+UpdateSkillDropdowns()
 
 CombatSection:Bind("ForceSkill1", Enum.KeyCode.C, function()
     if SelectedSkills.Slot1 then
