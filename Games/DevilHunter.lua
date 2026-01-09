@@ -92,6 +92,10 @@ CombatSection:Toggle("No WallJump CD", function(state)
     CombatModule.NoWallJumpCD(state)
 end)
 
+CombatSection:Toggle("Bypass Skill Requirements", function(state)
+    CombatModule.BypassSkillRequirements(state)
+end)
+
 local WeaponType = CombatModule.GetWeaponType()
 local currentWeaponName = "None"
 if WeaponType then
@@ -107,7 +111,7 @@ local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, funct
     SelectedSkills.Slot2 = selected
 end)
 
-local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
+local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 3", KatanaSkills, function(selected)
     SelectedSkills.Slot3 = selected
 end)
 

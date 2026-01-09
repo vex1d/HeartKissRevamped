@@ -195,23 +195,31 @@ function Combat.ForceUseSkill(SkillName: string)
     SkillLib.FireSkill(Framework, game.Players.LocalPlayer, SkillName, "Start", "Z")
 end
 
-function Combat.Idk()
-    local Framework = require(ReplicatedStorage:WaitForChild("Files"):WaitForChild("Framework"))
+local OldVerify = nil
+function Combat.BypassSkillRequirements(Toggle: boolean)
+    local Framework = require(game.ReplicatedStorage:WaitForChild("Files"):WaitForChild("Framework"))
     local SkillLib = Framework:GetModule("SkillLibrary")
 
-    -- We hook the VerifySkill function
-    local OldVerify = SkillLib.VerifySkill
-    SkillLib.VerifySkill = function(...)
-        local Args = {...}
-        local ActionType = Args[4] -- "Start" or "End"
-        
-        -- If the game is checking if we CAN start a skill, tell it YES.
-        if ActionType == "Start" then
-            return true
+    if not OldVerify then
+        OldVerify = SkillLib.VerifySkill
+    end
+
+    if Toggle then
+        SkillLib.VerifySkill = function(...)
+            local Args = {...}
+            local ActionType = Args[4]
+            
+    
+            if ActionType == "Start" then
+                return true
+            end
+            
+            return OldVerify(...)
         end
-        
-        -- Otherwise, call the original logic
-        return OldVerify(...)
+    else
+        if OldVerify then
+            SkillLib.VerifySkill = OldVerify
+        end
     end
 
     print("Skill Requirements Bypassed: You can now use skills while stunned/weaponless.")
