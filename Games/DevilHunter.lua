@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local Workspace = game:GetService("Workspace")
+
 local Lib = require("GUI/Library")
 local PlayerUtils = require("Utils/PlayerUtils")
 
@@ -26,6 +26,7 @@ local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
 print("Loading Devil Hunter")
+
 local WeaponType = CombatModule.GetWeaponType()
 local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
 
@@ -35,29 +36,46 @@ local SelectedSkills = {
     Slot3 = nil
 }
 
+local WeaponType = CombatModule.GetWeaponType()
+local currentWeaponName = "None"
 
-local currentWeaponName = (WeaponType and WeaponType.Value) or "Loading..."
+if WeaponType then
+    currentWeaponName = WeaponType.Value
+end
+
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
 
-WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
-    weaponTypeLabel:SetText("Current Weapon: " .. tostring(WeaponType.Value))
+if WeaponType then
+    WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
+        weaponTypeLabel:SetText("Current Weapon: " .. tostring(WeaponType.Value))
+    end)
+else
+    warn("Failed to get WeaponType: ", WeaponType.Value)
+end
+
+CombatSection:Dropdown("Skill Slot 1", KatanaSkills, function(selected)
+    SelectedSkills.Slot1 = selected
+end)
+
+CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
+    SelectedSkills.Slot2 = selected
 end)
 
 CombatSection:Bind("ForceSkill1", Enum.KeyCode.C, function()
     if SelectedSkills.Slot1 then
-        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+        CombatModule.ForceUseSkill(SelectedSkills.Slot1)
     end
 end)
 
 CombatSection:Bind("ForceSkill2", Enum.KeyCode.V, function()
     if SelectedSkills.Slot2 then
-        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+        CombatModule.ForceUseSkill(SelectedSkills.Slot2)
     end
 end)
 
 CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
     if SelectedSkills.Slot3 then
-        CombatModule.ForceSkill1(SelectedSkills.Slot1)
+        CombatModule.ForceUseSkill(SelectedSkills.Slot3) 
     end
 end)
 

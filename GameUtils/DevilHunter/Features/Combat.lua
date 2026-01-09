@@ -5,15 +5,18 @@ local lPlayer = Players.LocalPlayer
 
 local Combat = {}
 
-
 Combat.KatanaSkills = {}
 Combat.FistSkills = {}
 Combat.DaggerSkills = {}
 Combat.FireArmSkills = {}
 Combat.MiscSkills = {}
 
-function  Combat.GetWeaponType()
-    local Character = lPlayer.Character
+function Combat.GetWeaponType()
+    repeat
+        task.wait(1)
+    until lPlayer.Character
+     
+    local Character = lPlayer.Character or lPlayer.CharacterAdded:Wait()
     local WeaponType = Character.Info.WeaponType
     
     return WeaponType
