@@ -615,7 +615,7 @@ function  Library:Tab(text: string)
                         isBinding = false
                         BindBtn.BorderColor3 = THEMES.BorderColor
                         
-                        if input.KeyCode == Enum.KeyCode.Escape then
+                        if input.KeyCode == Enum.KeyCode.Backspace then
                             CurrentKey = Enum.KeyCode.None
                             BindBtn.Text = "[None]"
                         else
@@ -680,7 +680,7 @@ function  Library:Tab(text: string)
                         isBinding = false
                         BindBtn.BorderColor3 = THEMES.BorderColor
                         
-                        if input.KeyCode == Enum.KeyCode.Escape then
+                        if input.KeyCode == Enum.KeyCode.Backspace then
                             CurrentKey = Enum.KeyCode.None
                             BindBtn.Text = "[None]"
                         else

@@ -46,11 +46,11 @@ local SelectedSkills = {
 
 --------------------------Player Tab--------------------------
 local WalkSpeedEnabled = false
-PlayerSection:Toggle("Walk Speed", function(state)
+PlayerSection:Toggle("Toggle Walk Speed", function(state)
     WalkSpeedEnabled = state
 end)
 
-PlayerSection:Slider("Speed", 0, 150, 16, function(value)
+PlayerSection:Slider("Speed", 16, 350, 16, function(value)
     if not WalkSpeedEnabled then return end
     lPlayer.Character.Humanoid.WalkSpeed = value
 end)
@@ -58,12 +58,12 @@ end)
 local FlyEnabled = false
 local FlySpeed = 16
 
-PlayerSection:ToggleBind("Fly", Enum.KeyCode.T, function(state)
+PlayerSection:ToggleBind("Toggle Fly", Enum.KeyCode.T, function(state)
     FlyEnabled = state
     PlayerUtils.Fly(state, FlySpeed)
 end)
 
-PlayerSection:Slider("Fly Speed", 0, 150, 16, function(value)
+PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
     FlySpeed = value
 
     if FlyEnabled then
