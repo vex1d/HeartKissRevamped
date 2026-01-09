@@ -52,9 +52,20 @@ PlayerSection:Toggle("Toggle Walk Speed", function(state)
     WalkSpeedEnabled = state
 end)
 
+local walkspeedCon
 PlayerSection:Slider("Speed", 16, 350, 16, function(value)
-    if not WalkSpeedEnabled then return end
-    lPlayer.Character.Humanoid.WalkSpeed = value
+    if not WalkSpeedEnabled then
+        if walkspeedCon then
+            walkspeedCon:Disconnect()
+            walkspeedCon = nil
+        end
+        return
+    end
+    local humanoid = lPlayer.Character:FindFirstChild("Humanoid")
+    humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        humanoid.WalkSpeed = value
+    end)
+    humanoid.WalkSpeed = value
 end)
 
 local FlyEnabled = false
@@ -135,7 +146,6 @@ CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
         CombatModule.ForceUseSkill(SelectedSkills.Slot3) 
     end
 end)
-
 
 
 --------------AutoFarm Tab ----------------
