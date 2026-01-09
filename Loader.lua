@@ -29,7 +29,4 @@ local function gitRequire(path)
     return func()
 end
 
-local Version = "0.0.1"
-warn("[HeartKiss Revamped] Loading... ", Version)
-
 gitRequire("Main")
