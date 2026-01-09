@@ -86,9 +86,9 @@ function Missions.RunCleanup(ID, MissionType)
 
     local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
     
-    while not TurnInPoint:FindFirstChild("Prompt") do
-        task.wait(1)
-    end
+    -- while not TurnInPoint:FindFirstChild("Prompt") do
+    --     task.wait(1)
+    -- end
 
     if TurnInPoint then
         while PlayerUtils:CheckForClosePlayers(TurnInPoint, AUTOFARM_CONFIG.SafeDistance) do
