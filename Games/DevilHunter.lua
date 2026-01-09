@@ -196,6 +196,11 @@ local SettingsSection = SettingsTab:Section("Settings")
 SettingsSection:Toggle("No Blur", function(state)
     for _, v in Lighting:GetChildren() do
         if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
+            if v.Name == "InventoryBlur" then
+                continue
+            end
+
+            
             v.Enabled = not state
         end
     end
