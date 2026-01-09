@@ -178,6 +178,12 @@ end)
 
 
 -------------------MISC TAB-------------------
+local MiscSection = MiscTab:Section("Misc")
+MiscSection:Toggle("Toggle ESP", function(state)
+
+end)
+
+-------------------SETTINGS TAB-------------------
 local SettingsSection = SettingsTab:Section("Settings")
 SettingsSection:Toggle("No Blur", function(state)
     for _, v in Lighting:GetChildren() do

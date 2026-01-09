@@ -82,6 +82,10 @@ function Combat.NoDashCD(Toggle: boolean)
     local SkillLib = Framework:GetModule("SkillLibrary")
     local MovementHandler = Framework:GetModule("MovementHandler")
 
+    if not OldTagHandlerAdd then
+        OldTagHandlerAdd = TagHandler.Add
+    end
+
     local IgnoredTags = {
         ["DashCD"] = true,
         ["NoSprint"] = true,
@@ -100,25 +104,20 @@ function Combat.NoDashCD(Toggle: boolean)
     
 
     OldTagHandlerAdd = TagHandler.Add
-    if Toggle then
+   if Toggle then
         TagHandler.Add = function(Character, TagName)
             if IgnoredTags[TagName] then
+                -- print("Blocked Tag: " .. tostring(TagName))
                 return nil
             end
-            
+
             return OldTagHandlerAdd(Character, TagName)
         end
     else
-        TagHandler.Add = OldTagHandlerAdd
+        if OldTagHandlerAdd then
+            TagHandler.Add = OldTagHandlerAdd
+        end
     end
-    -- TagHandler.Add = function(Character, TagName)
-    --     if IgnoredTags[TagName] then
-    --         warn("Blocked Dash!")
-    --         return nil
-    --     end
-        
-    --     return oldAdd(Character, TagName)
-    -- end
 end
 
 function Combat.NoDashStun()
