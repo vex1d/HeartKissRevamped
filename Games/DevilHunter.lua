@@ -25,8 +25,8 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
-print("Loading Devil Hunter")
 
+print(CombatModule.GetSkills())
 local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
 
 local SelectedSkills = {
