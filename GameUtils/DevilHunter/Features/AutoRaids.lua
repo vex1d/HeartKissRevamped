@@ -22,7 +22,6 @@ local function AutoYakuzaRaid()
     local Character = lplayer.Character or lplayer.CharacterAdded:Wait()
     local Root = Character:WaitForChild("HumanoidRootPart")
 
-
     if not Character:FindFirstChild("Hitbox") then 
         local hitbox = Instance.new("Part")
         hitbox.Name = "Hitbox"
@@ -55,7 +54,6 @@ local function AutoYakuzaRaid()
         end
     end)
 
-    -- [KILL AURA LOOP]
     task.spawn(function()
         while AutoRaids.AutoRaidsEnabled do
             local hitbox = Character:FindFirstChild("Hitbox")
@@ -116,5 +114,6 @@ function AutoRaids.StartRaid(RaidName: string)
         TeleportService:Teleport(TargetPlaceId, lplayer)
     end
 end
+--7440311707 gameid
 
 return AutoRaids
