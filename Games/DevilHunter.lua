@@ -27,7 +27,6 @@ local Raidfarm = AutoFarm:Section("Raids")
 
 print("Loading Devil Hunter")
 
-local WeaponType = CombatModule.GetWeaponType()
 local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
 
 local SelectedSkills = {
@@ -37,11 +36,15 @@ local SelectedSkills = {
 }
 
 local WeaponType = CombatModule.GetWeaponType()
+warn("Got WeaponType: ", WeaponType.Value)
+
 local currentWeaponName = "None"
 
 if WeaponType then
     currentWeaponName = WeaponType.Value
 end
+
+print("Current Weapon: " .. currentWeaponName)
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
 
