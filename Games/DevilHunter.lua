@@ -33,6 +33,8 @@ local Raidfarm = AutoFarm:Section("Raids")
 
 local MiscSection = MiscTab:Section("Settings")
 
+local SettingsSection = SettingsTab:Section("Settings")
+
 local AllSkills = CombatModule.GetSkills()
 local KatanaSkills = AllSkills.Katana
 local FistSkills = AllSkills.Fist
@@ -45,7 +47,6 @@ local SelectedSkills = {
     Slot2 = nil,
     Slot3 = nil
 }
-
 
 --------------------------Player Tab--------------------------
 local WalkSpeedEnabled = false
@@ -167,7 +168,7 @@ end)
 
 
 -------------------MISC TAB-------------------
-MiscSection:Toggle("No Blur", function(state)
+SettingsSection:Toggle("No Blur", function(state)
     for _, v in Lighting:GetChildren() do
         if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
             v.Enabled = not state
@@ -175,6 +176,6 @@ MiscSection:Toggle("No Blur", function(state)
     end
 end)
 
-MiscSection:Toggle("Fullbright", function(state)
+SettingsSection:Toggle("Fullbright", function(state)
     PlayerUtils.Fullbright(state)
 end)
