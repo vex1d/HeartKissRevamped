@@ -167,13 +167,13 @@ end)
 
 -------------------MISC TAB-------------------
 local SettingsSection = SettingsTab:Section("Settings")
--- SettingsSection:Toggle("No Blur", function(state)
---     for _, v in Lighting:GetChildren() do
---         if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
---             v.Enabled = not state
---         end
---     end
--- end)
+SettingsSection:Toggle("No Blur", function(state)
+    for _, v in Lighting:GetChildren() do
+        if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
+            v.Enabled = not state
+        end
+    end
+end)
 
 SettingsSection:Toggle("Fullbright", function(state)
     PlayerUtils.Fullbright(state)
