@@ -82,7 +82,8 @@ function Missions.RunCleanup(ID, MissionType)
 
     root.CFrame = AUTOFARM_CONFIG.SafeZonePos * CFrame.new(0, 5, 0)
 
-    
+    task.wait(3)
+
     local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
     
     while not TurnInPoint:FindFirstChild("Prompt") do
