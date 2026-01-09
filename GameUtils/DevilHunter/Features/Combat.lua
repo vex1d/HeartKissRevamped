@@ -16,7 +16,6 @@ function  Combat.GetWeaponType()
     local Character = lPlayer.Character
     local WeaponType = Character.Info.WeaponType
     
-
     return WeaponType
 end
 

@@ -34,9 +34,11 @@ local SelectedSkills = {
     Slot3 = nil
 }
 
-local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. WeaponType.Value)
+local currentWeaponName = (WeaponType and WeaponType.Value) or "Loading..."
+local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
+
 WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
-    weaponTypeLabel.Text = "Current Weapon: " .. WeaponType.Value
+    weaponTypeLabel:SetText("Current Weapon: " .. tostring(WeaponType.Value))
 end)
 
 CombatSection:Bind("ForceSkill1", Enum.KeyCode.C, function()
