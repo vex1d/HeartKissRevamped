@@ -38,15 +38,21 @@ function Combat.GetSkills()
         
         if requiredWeapon then
             local function sortSkill(wep)
-                if wep == "Katana" then table.insert(Combat.KatanaSkills, skillName)
+                if wep == "Katana" or wep == "Sword" or wep == "KatanaHybrid" then table.insert(Combat.KatanaSkills, skillName)
                 elseif wep == "Fist" then table.insert(Combat.FistSkills, skillName)
                 elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
                 elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
+                else 
+                    table.insert(Combat.MiscSkills, skillName)
+                    table.insert(Combat.KatanaSkills, skillName)
+                    table.insert(Combat.FistSkills, skillName)
+                    table.insert(Combat.DaggerSkills, skillName)
+                    table.insert(Combat.FireArmSkills, skillName)
                 end
             end
 
             if typeof(requiredWeapon) == "table" then
-                for _, weapon in ipairs(requiredWeapon) do
+                for _, weapon in requiredWeapon do
                     sortSkill(weapon)
                 end
             else
@@ -179,7 +185,7 @@ function Combat.NoStun()
     end
 end
 
-function  Combat.ForceUseSkill(SkillName: string)
+function Combat.ForceUseSkill(SkillName: string)
     local Files = ReplicatedStorage:WaitForChild("Files")
     local Framework = require(Files:WaitForChild("Framework"))
     local TagHandler = Framework:GetModule("TagHandler")
@@ -189,100 +195,26 @@ function  Combat.ForceUseSkill(SkillName: string)
     SkillLib.FireSkill(Framework, game.Players.LocalPlayer, SkillName, "Start", "Z")
 end
 
-    -- local IgnoredTags = {
-    --     ["DashCD"] = true,
-    --     ["NoSprint"] = true,
-    --     ["SuperDashCD"] = true,
-    --     ["Stunned"] = true
-    -- }
+function Combat.Idk()
+    local Framework = require(ReplicatedStorage:WaitForChild("Files"):WaitForChild("Framework"))
+    local SkillLib = Framework:GetModule("SkillLibrary")
 
-    -- local OldAdd = TagHandler.Add
-
-    -- TagHandler.Add = function(Character, TagName)
-    --     if IgnoredTags[TagName] then
-    --         warn("Blocked Cooldown: " .. tostring(TagName)) 
-    --         return nil 
-    --     end
-
-    --     return OldAdd(Character, TagName)
-    -- end
-
-    -- repeat task.wait() until Framework.Modules.TagHandler
-    -- local TagHandler = Framework.Modules.TagHandler
-
-    -- local OldAdd = TagHandler.Add
-    -- TagHandler.Add = function(Character, TagName)
-    --     if TagName == "Stunned" or TagName == "Ragdolled" then
-    --         warn("Blocked Stun!")
-    --         return nil -- Do nothing
-    --     end
+    -- We hook the VerifySkill function
+    local OldVerify = SkillLib.VerifySkill
+    SkillLib.VerifySkill = function(...)
+        local Args = {...}
+        local ActionType = Args[4] -- "Start" or "End"
         
-    --     return OldAdd(Character, TagName)
-    -- end
-
-    --[[ --- NO STUN
-    local Files = game:GetService("ReplicatedStorage"):WaitForChild("Files")
-    local Framework = require(Files:WaitForChild("Framework"))
-
-    -- Wait for the TagHandler to load
-    repeat task.wait() until Framework.Modules.TagHandler
-    local TagHandler = Framework.Modules.TagHandler
-
-    -- Save the original function
-    local OldAdd = TagHandler.Add
-
-    -- Overwrite it
-    TagHandler.Add = function(Character, TagName)
-        if TagName == "Stunned" or TagName == "Ragdolled" then
-            warn("Blocked Stun!")
-            return nil -- Do nothing
+        -- If the game is checking if we CAN start a skill, tell it YES.
+        if ActionType == "Start" then
+            return true
         end
         
-        return OldAdd(Character, TagName)
+        -- Otherwise, call the original logic
+        return OldVerify(...)
     end
 
-    ]]
+    print("Skill Requirements Bypassed: You can now use skills while stunned/weaponless.")
+end
 
-    --[[
-    -- 
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local Files = ReplicatedStorage:WaitForChild("Files")
-    local Framework = require(Files:WaitForChild("Framework"))
-    local TagHandler = Framework:GetModule("TagHandler")
-
-    -- 1. Save the original function so we don't break the whole game
-    local OldGet = TagHandler.Get
-
-    -- 2. Create the hook
-    local NewGet = hookfunction(TagHandler.Get, function(Character, TagList)
-        
-        -- Check if the game is checking for Dash-blocking tags
-        -- We know from the script that DashStunList contains "DashCD"
-        if type(TagList) == "table" and table.find(TagList, "DashCD") then
-            
-            -- Return false (meaning: We have NO tags, we are free to move!)
-            return false 
-        end
-
-        -- For everything else (Health, Damage, etc.), run the original function
-        return OldGet(Character, TagList)
-    end)
-    ]]
-
-    --[[ -- NO WALL CD
-
-    local RunService = game:GetService("RunService")
-    local Framework = require(game:GetService("ReplicatedStorage").Files.Framework)
-    local MovementHandler = Framework:GetModule("MovementHandler")
-
-    -- Simple loop to clear memory of which walls you've climbed
-    RunService.Stepped:Connect(function()
-        -- This table stores [Part] = os.clock()
-        -- If we empty it, the game forgets you just climbed that wall
-        if MovementHandler.WallJumpCooldowns then
-            table.clear(MovementHandler.WallJumpCooldowns)
-        end
-    end)
-    ]]
-
-    return Combat
+return Combat
