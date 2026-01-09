@@ -42,26 +42,26 @@ function Combat.GetSkills()
                 elseif wep == "Fist" then table.insert(Combat.FistSkills, skillName)
                 elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
                 elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
-                else 
-                    if not table.find(Combat.MiscSkills, skillName) then
-                        table.insert(Combat.MiscSkills, skillName)
-                    end
+                -- else 
+                --     if not table.find(Combat.MiscSkills, skillName) then
+                --         table.insert(Combat.MiscSkills, skillName)
+                --     end
 
-                    if not table.find(Combat.KatanaSkills, skillName) then
-                        table.insert(Combat.KatanaSkills, skillName)
-                    end
+                --     if not table.find(Combat.KatanaSkills, skillName) then
+                --         table.insert(Combat.KatanaSkills, skillName)
+                --     end
 
-                    if not table.find(Combat.FistSkills, skillName) then
-                        table.insert(Combat.FistSkills, skillName)
-                    end
+                --     if not table.find(Combat.FistSkills, skillName) then
+                --         table.insert(Combat.FistSkills, skillName)
+                --     end
 
-                    if not table.find(Combat.DaggerSkills, skillName) then
-                        table.insert(Combat.DaggerSkills, skillName)
-                    end
+                --     if not table.find(Combat.DaggerSkills, skillName) then
+                --         table.insert(Combat.DaggerSkills, skillName)
+                --     end
 
-                    if not table.find(Combat.FireArmSkills, skillName) then
-                        table.insert(Combat.FireArmSkills, skillName)
-                    end
+                --     if not table.find(Combat.FireArmSkills, skillName) then
+                --         table.insert(Combat.FireArmSkills, skillName)
+                --     end
                 end
             end
 
