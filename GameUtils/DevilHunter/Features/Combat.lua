@@ -244,7 +244,7 @@ local function SetupCharacer(Character: Model)
     if not animator then return end
 
     animator.AnimationPlayed:Connect(function(Track)
-        if not Combat.Enabled then return end
+        if not Combat.ParryEnabled then return end
 
         local Player = Players:GetPlayerFromCharacter(Character)
         if Player == lPlayer then return end
@@ -269,7 +269,6 @@ local function SetupCharacer(Character: Model)
         end
     end)
 end
-
 
 local function SetupPlayer(Player)
     Player.CharacterAdded:Connect(function(Character)
