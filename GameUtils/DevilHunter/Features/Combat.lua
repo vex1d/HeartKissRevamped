@@ -2,11 +2,10 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
-local Timings = require("GameUtils/DevilHunter/Timings/Timings")
-
 local lPlayer = Players.LocalPlayer
-
 local Combat = {}
+
+local Timings = require("GameUtils/DevilHunter/Timings/Timings")
 
 Combat.ParryDistance = 10
 Combat.ParryEnabled = false
@@ -144,7 +143,6 @@ function Combat.NoWallJumpCD(Toggle: boolean)
         end
     end
 end
-
 
 function Combat.NoDashStun()
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
