@@ -43,11 +43,25 @@ function Combat.GetSkills()
                 elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
                 elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
                 else 
-                    table.insert(Combat.MiscSkills, skillName)
-                    table.insert(Combat.KatanaSkills, skillName)
-                    table.insert(Combat.FistSkills, skillName)
-                    table.insert(Combat.DaggerSkills, skillName)
-                    table.insert(Combat.FireArmSkills, skillName)
+                    if not table.find(Combat.MiscSkills, skillName) then
+                        table.insert(Combat.MiscSkills, skillName)
+                    end
+
+                    if not table.find(Combat.KatanaSkills, skillName) then
+                        table.insert(Combat.KatanaSkills, skillName)
+                    end
+
+                    if not table.find(Combat.FistSkills, skillName) then
+                        table.insert(Combat.FistSkills, skillName)
+                    end
+
+                    if not table.find(Combat.DaggerSkills, skillName) then
+                        table.insert(Combat.DaggerSkills, skillName)
+                    end
+
+                    if not table.find(Combat.FireArmSkills, skillName) then
+                        table.insert(Combat.FireArmSkills, skillName)
+                    end
                 end
             end
 
@@ -195,9 +209,11 @@ function Combat.ForceUseSkill(SkillName: string)
     SkillLib.FireSkill(Framework, game.Players.LocalPlayer, SkillName, "Start", "Z")
 end
 
-local OldVerify = nil
+
+local OldVerify = nil 
 function Combat.BypassSkillRequirements(Toggle: boolean)
-    local Framework = require(game.ReplicatedStorage:WaitForChild("Files"):WaitForChild("Framework"))
+    local Files = ReplicatedStorage:WaitForChild("Files")
+    local Framework = require(Files:WaitForChild("Framework"))
     local SkillLib = Framework:GetModule("SkillLibrary")
 
     if not OldVerify then
@@ -209,20 +225,19 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
             local Args = {...}
             local ActionType = Args[4]
             
-    
             if ActionType == "Start" then
                 return true
             end
             
             return OldVerify(...)
         end
+        print("Skill Requirements Bypassed: Active")
     else
         if OldVerify then
             SkillLib.VerifySkill = OldVerify
+            print("Skill Requirements Bypassed: Disabled")
         end
     end
-
-    print("Skill Requirements Bypassed: You can now use skills while stunned/weaponless.")
 end
 
 return Combat
