@@ -53,9 +53,13 @@ local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, funct
     SelectedSkills.Slot2 = selected
 end)
 
+local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
+    SelectedSkills.Slot3 = selected
+end)
+
 local function UpdateSkillDropdowns()
     local wep = WeaponType and WeaponType.Value or "None"
-    local newList = MiscSkills -- Default
+    local newList = MiscSkills
     
     if wep == "Katana" then newList = KatanaSkills
     elseif wep == "Fist" then newList = FistSkills
@@ -65,6 +69,7 @@ local function UpdateSkillDropdowns()
     
     Slot1Dropdown:Refresh(newList)
     Slot2Dropdown:Refresh(newList)
+    Slot3Dropdown:Refresh(newList)
 end
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
