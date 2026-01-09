@@ -1,3 +1,4 @@
+local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -126,6 +127,47 @@ function PlayerUtils.Fly(Enabled: boolean, Speed: number)
         FlyState.BV.Velocity = (Movement.Magnitude > 0) and (Movement.Unit * Speed) or Vector3.new(0, 0, 0)
         FlyState.BG.CFrame = Camera.CFrame
     end)
+end
+
+local OriginalLighting = {
+    Ambient = Lighting.Ambient,
+    OutdoorAmbient = Lighting.OutdoorAmbient,
+    Brightness = Lighting.Brightness,
+    ClockTime = Lighting.ClockTime,
+    GlobalShadows = Lighting.GlobalShadows
+}
+
+function PlayerUtils.Fullbright(Enabled: boolean)
+    if Enabled then
+        Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+        Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+        Lighting.Brightness = 2
+        Lighting.GlobalShadows = false
+    else
+        Lighting.Ambient = OriginalLighting.Ambient
+        Lighting.OutdoorAmbient = OriginalLighting.OutdoorAmbient
+        Lighting.Brightness = OriginalLighting.Brightness
+        Lighting.GlobalShadows = OriginalLighting.GlobalShadows
+    end
+end
+
+
+local FullbrightConnection = nil
+function PlayerUtils.ToggleConstantFullbright(Enabled: boolean)
+    if Enabled then
+        FullbrightConnection = Lighting:GetPropertyChangedSignal("Ambient"):Connect(function()
+            Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            Lighting.Brightness = 2
+            Lighting.GlobalShadows = false
+        end)
+        PlayerUtils.Fullbright(true)
+    else
+        if FullbrightConnection then 
+            FullbrightConnection:Disconnect() 
+            FullbrightConnection = nil 
+        end
+        PlayerUtils.Fullbright(false)
+    end
 end
 
 return PlayerUtils

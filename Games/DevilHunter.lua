@@ -1,3 +1,4 @@
+local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
@@ -160,4 +161,18 @@ Raidfarm:Button("Start Raid", function()
     if SelectedRaid then
         RaidsModule.StartRaid(SelectedRaid)
     end
+end)
+
+
+-------------------MISC TAB-------------------
+MiscTab:Toggle("No Blur", function(state)
+    for _, v in Lighting:GetChildren() do
+        if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
+            v.Enabled = not state
+        end
+    end
+end)
+
+MiscTab:Toggle("Fullbright", function(state)
+    PlayerUtils.Fullbright(state)
 end)
