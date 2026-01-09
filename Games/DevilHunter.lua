@@ -50,19 +50,12 @@ PlayerSection:Toggle("Toggle Walk Speed", function(state)
     WalkSpeedEnabled = state
 end)
 
-local walkspeedCon
-PlayerSection:Slider("Speed", 16, 350, 16, function(value)
+PlayerSection:Slider("Speed", 16, 150, 16, function(value)
     if not WalkSpeedEnabled then
-        if walkspeedCon then
-            walkspeedCon:Disconnect()
-            walkspeedCon = nil
-        end
         return
     end
-    local humanoid = lPlayer.Character:FindFirstChild("Humanoid")
-    walkspeedCon = humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-        humanoid.WalkSpeed = value
-    end)
+
+    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
     humanoid.WalkSpeed = value
 end)
 
@@ -200,7 +193,7 @@ SettingsSection:Toggle("No Blur", function(state)
                 continue
             end
 
-            
+
             v.Enabled = not state
         end
     end
