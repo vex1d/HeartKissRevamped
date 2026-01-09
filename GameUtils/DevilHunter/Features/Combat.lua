@@ -103,7 +103,6 @@ function Combat.NoDashCD(Toggle: boolean)
     }
     
 
-    OldTagHandlerAdd = TagHandler.Add
    if Toggle then
         TagHandler.Add = function(Character, TagName)
             if IgnoredTags[TagName] then

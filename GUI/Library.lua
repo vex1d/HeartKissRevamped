@@ -616,14 +616,14 @@ function  Library:Tab(text: string)
                         BindBtn.BorderColor3 = THEMES.BorderColor
                         
                         if input.KeyCode == Enum.KeyCode.Backspace then
-                            CurrentKey = Enum.KeyCode.None
+                            CurrentKey = nil
                             BindBtn.Text = "[None]"
                         else
                             CurrentKey = input.KeyCode
                             BindBtn.Text = "[" .. input.KeyCode.Name .. "]"
                         end
                     end
-                elseif not processed and input.KeyCode == CurrentKey then
+                elseif not processed and CurrentKey ~= nil and (input.KeyCode == CurrentKey) then
                      callback()
                 end
             end)
@@ -681,14 +681,14 @@ function  Library:Tab(text: string)
                         BindBtn.BorderColor3 = THEMES.BorderColor
                         
                         if input.KeyCode == Enum.KeyCode.Backspace then
-                            CurrentKey = Enum.KeyCode.None
+                            CurrentKey = nil
                             BindBtn.Text = "[None]"
                         else
                             CurrentKey = input.KeyCode
                             BindBtn.Text = "[" .. input.KeyCode.Name .. "]"
                         end
                     end
-                elseif not processed and input.KeyCode == CurrentKey then
+                elseif not processed and CurrentKey ~= nil and (input.KeyCode == CurrentKey) then
                     enabled = not enabled
                     callback(enabled)
 
