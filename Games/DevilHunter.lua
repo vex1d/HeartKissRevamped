@@ -31,6 +31,8 @@ local PlayerSection = MainTab:Section("Player")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
+local MiscSection = MiscTab:Section("Settings")
+
 local AllSkills = CombatModule.GetSkills()
 local KatanaSkills = AllSkills.Katana
 local FistSkills = AllSkills.Fist
@@ -165,7 +167,7 @@ end)
 
 
 -------------------MISC TAB-------------------
-MiscTab:Toggle("No Blur", function(state)
+MiscSection:Toggle("No Blur", function(state)
     for _, v in Lighting:GetChildren() do
         if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
             v.Enabled = not state
@@ -173,6 +175,6 @@ MiscTab:Toggle("No Blur", function(state)
     end
 end)
 
-MiscTab:Toggle("Fullbright", function(state)
+MiscSection:Toggle("Fullbright", function(state)
     PlayerUtils.Fullbright(state)
 end)
