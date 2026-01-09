@@ -35,7 +35,7 @@ local SelectedSkills = {
 }
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. WeaponType.Value)
-WeaponType.Changed:Connect(function()
+WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
     weaponTypeLabel.Text = "Current Weapon: " .. WeaponType.Value
 end)
 
@@ -56,8 +56,6 @@ CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
         CombatModule.ForceSkill1(SelectedSkills.Slot1)
     end
 end)
-
-
 
 local SelectedMission = nil
 AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
