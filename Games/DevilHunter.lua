@@ -24,16 +24,10 @@ local MiscTab = window:Tab("Misc")
 local SettingsTab = window:Tab("Settings")
 local ConfigsTab = window:Tab("Configs")
 
-local MainSection = MainTab:Section("Main")
-local CombatSection = MainTab:Section("Combat")
-local PlayerSection = MainTab:Section("Player")
-
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
 local MiscSection = MiscTab:Section("Settings")
-
-local SettingsSection = SettingsTab:Section("Settings")
 
 local AllSkills = CombatModule.GetSkills()
 local KatanaSkills = AllSkills.Katana
@@ -49,6 +43,10 @@ local SelectedSkills = {
 }
 
 --------------------------Player Tab--------------------------
+local MainSection = MainTab:Section("Main")
+local CombatSection = MainTab:Section("Combat")
+local PlayerSection = MainTab:Section("Player")
+
 local WalkSpeedEnabled = false
 PlayerSection:Toggle("Toggle Walk Speed", function(state)
     WalkSpeedEnabled = state
@@ -69,7 +67,7 @@ end)
 
 PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
     FlySpeed = value
-
+    
     if FlyEnabled then
         PlayerUtils.Fly(true, FlySpeed)
     end
@@ -104,11 +102,11 @@ local function UpdateSkillDropdowns()
     elseif wep == "Fist" then newList = FistSkills
     elseif wep == "Dagger" then newList = DaggerSkills
     elseif wep == "FireArm" then newList = FireArmSkills
-    end
-    
-    Slot1Dropdown:Refresh(newList)
-    Slot2Dropdown:Refresh(newList)
-    Slot3Dropdown:Refresh(newList)
+end
+
+Slot1Dropdown:Refresh(newList)
+Slot2Dropdown:Refresh(newList)
+Slot3Dropdown:Refresh(newList)
 end
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
@@ -168,13 +166,14 @@ end)
 
 
 -------------------MISC TAB-------------------
-SettingsSection:Toggle("No Blur", function(state)
-    for _, v in Lighting:GetChildren() do
-        if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
-            v.Enabled = not state
-        end
-    end
-end)
+local SettingsSection = SettingsTab:Section("Settings")
+-- SettingsSection:Toggle("No Blur", function(state)
+--     for _, v in Lighting:GetChildren() do
+--         if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
+--             v.Enabled = not state
+--         end
+--     end
+-- end)
 
 SettingsSection:Toggle("Fullbright", function(state)
     PlayerUtils.Fullbright(state)
