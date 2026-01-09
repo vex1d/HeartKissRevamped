@@ -260,32 +260,42 @@ local function FlattenAnimations(Table)
 end
 FlattenAnimations(Timings)
 
-local function SetupPlayer(Player: Player)
-    Player.CharacterAdded:Connect(function(Character)
-        local humanoid = Character:WaitForChild("Humanoid", 5)
-        local animator = humanoid and humanoid:WaitForChild("Animator", 5)
-        if not animator then return end
+local function SetupCharacer(Character: Model)
+    local humanoid = Character:WaitForChild("Humanoid", 5)
+    local animator = humanoid and humanoid:WaitForChild("Animator", 5)
+    if not animator then return end
 
-        animator.AnimationPlayed:Connect(function(Track)
-            if not Combat.Enabled then return end
-            if Player == lPlayer then return end
+    animator.AnimationPlayed:Connect(function(Track)
+        if not Combat.Enabled then return end
+        if Player == lPlayer then return end
 
-            local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
-            if distance > Combat.ParryDistance then
-                return
-            end
+        local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
+        if distance > Combat.ParryDistance then
+            return
+        end
 
-            local AnimID = Track.Animation.AnimationId
-            local IDNumber = tonumber(string.match(AnimID, "%d+"))
-            local Delay = ParryTimings[IDNumber] or 0.2
+        local AnimID = Track.Animation.AnimationId
+        local IDNumber = tonumber(string.match(AnimID, "%d+"))
+        local Delay = ParryTimings[IDNumber] or 0.2
 
-            task.delay(Delay, function()
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
-                task.wait(0)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
-            end)
+        task.delay(Delay, function()
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
+            task.wait(0)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
         end)
     end)
+end
+
+
+local function SetupPlayer(Player: Player)
+    Player.CharacterAdded:Connect(function(Character)
+       SetupPlayer(Character)
+    end)
+
+    local Character = Player.Character
+    if Character then
+        SetupCharacer(Character)
+    end
 end
 
 local ParryCon = nil
