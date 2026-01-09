@@ -170,9 +170,6 @@ function PlayerUtils.ToggleConstantFullbright(Enabled: boolean)
     end
 end
 
-
-
-local PlayerUtils = {}
 local ESP_Folder = nil
 local ESP_Connection = nil
 function PlayerUtils.ToggleESP(Enabled: boolean)
