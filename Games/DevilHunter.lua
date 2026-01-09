@@ -1,6 +1,10 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
+
+local lPlayer = Players.LocalPlayer
 
 local Lib = require("GUI/Library")
 local PlayerUtils = require("Utils/PlayerUtils")
@@ -19,8 +23,9 @@ local MiscTab = window:Tab("Misc")
 local SettingsTab = window:Tab("Settings")
 local ConfigsTab = window:Tab("Configs")
 
-local PlayerSection = MainTab:Section("Main")
+local MainSection = MainTab:Section("Main")
 local CombatSection = MainTab:Section("Combat")
+local PlayerSection = MainTab:Section("Player")
 
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
@@ -37,6 +42,36 @@ local SelectedSkills = {
     Slot2 = nil,
     Slot3 = nil
 }
+
+
+--------------------------Player Tab--------------------------
+local WalkSpeedEnabled = false
+PlayerSection:Toggle("Walk Speed", function(state)
+    WalkSpeedEnabled = state
+end)
+
+PlayerSection:Slider("Speed", 0, 150, 16, function(value)
+    if not WalkSpeedEnabled then return end
+    lPlayer.Character.Humanoid.WalkSpeed = value
+end)
+
+local FlyEnabled = false
+local FlySpeed = 16
+
+PlayerSection:ToggleBind("Fly", Enum.KeyCode.T, function(state)
+    FlyEnabled = state
+    PlayerUtils.Fly(state, FlySpeed)
+end)
+
+PlayerSection:Slider("Fly Speed", 0, 150, 16, function(value)
+    FlySpeed = value
+
+    if FlyEnabled then
+        PlayerUtils.Fly(true, FlySpeed)
+    end
+end)
+
+--------------------------Combat Tab--------------------------
 
 local WeaponType = CombatModule.GetWeaponType()
 local currentWeaponName = "None"
@@ -98,6 +133,10 @@ CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
         CombatModule.ForceUseSkill(SelectedSkills.Slot3) 
     end
 end)
+
+
+
+--------------AutoFarm Tab ----------------
 
 local SelectedMission = nil
 AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)

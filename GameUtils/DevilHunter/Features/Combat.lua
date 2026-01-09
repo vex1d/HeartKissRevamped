@@ -83,9 +83,50 @@ function Combat.NoDashCD()
 
     local IgnoredTags = {
         ["DashCD"] = true,
-        ["Stunned"] = true
+        ["NoSprint"] = true,
+        ["SuperDashCD"] = true,
+        ["Stunned"] = true,
+        ["Knocked"] = true,
+        ["ParryStunned"] = true,
+        ["Ragdolled"] = true,
+        ["Carried"] = true,
+        ["PostureBroken"] = true,
+        ["Mounted"] = true,
+        ["Grabbed"] = true,
+        ["Action"] = true,
+        ["Skateboard"] = true
     }
-    MovementHandler:Dash(Framework, "Forward")
+    
+
+    local oldAdd = TagHandler.Add
+    TagHandler.Add = function(Character, TagName)
+        if IgnoredTags[TagName] then
+            warn("Blocked Dash!")
+            return nil
+        end
+        
+        return oldAdd(Character, TagName)
+    end
+end
+
+function Combat.NoDashStun()
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Files = ReplicatedStorage:WaitForChild("Files")
+    local Framework = require(Files:WaitForChild("Framework"))
+    local TagHandler = Framework:GetModule("TagHandler")
+
+    local OldGet = TagHandler.Get
+
+    local NewGet = hookfunction(TagHandler.Get, function(Character, TagList)
+        if type(TagList) == "table" and table.find(TagList, "DashCD") then
+            print("Blocked Dash!")
+            return false 
+        end
+
+        -- print(TagList)
+
+        return OldGet(Character, TagList)
+    end)
 end
 
 function Combat.NoStun()

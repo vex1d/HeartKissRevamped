@@ -1,6 +1,15 @@
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local lPlayer = Players.LocalPlayer
 local PlayerUtils = {}
+
+local FlyState = {
+    Active = false,
+    BG = nil,
+    BV = nil,
+    Connection = nil
+}
 
 function PlayerUtils:SpamPrompt(prompt: ProximityPrompt, attempts: number, delay: number)
     if not prompt then return end
@@ -57,6 +66,66 @@ function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
     end
     
     return false
+end
+
+
+function PlayerUtils.Fly(Enabled: boolean, Speed: number)
+    FlyState.Active = Enabled
+    local Camera = workspace.CurrentCamera
+    local Character = lPlayer.Character or lPlayer.CharacterAdded:Wait()
+    local Root = Character:WaitForChild("HumanoidRootPart")
+    local Hum = Character:WaitForChild("Humanoid")
+    
+    local function Cleanup()
+        if FlyState.BG then FlyState.BG:Destroy() FlyState.BG = nil end
+        if FlyState.BV then FlyState.BV:Destroy() FlyState.BV = nil end
+        if FlyState.Connection then FlyState.Connection:Disconnect() FlyState.Connection = nil end
+        
+        local char = lPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then
+            char.Humanoid.PlatformStand = false
+        end
+    end
+
+    if not Enabled then
+        Cleanup()
+        return
+    end
+
+    Cleanup()
+
+    FlyState.BG = Instance.new("BodyGyro")
+    FlyState.BG.P = 9e4
+    FlyState.BG.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    FlyState.BG.CFrame = Root.CFrame
+    FlyState.BG.Parent = Root
+
+    FlyState.BV = Instance.new("BodyVelocity")
+    FlyState.BV.Velocity = Vector3.new(0, 0, 0)
+    FlyState.BV.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    FlyState.BV.Parent = Root
+
+    Hum.PlatformStand = true
+
+    FlyState.Connection = RunService.RenderStepped:Connect(function()
+        if not FlyState.Active or not Root.Parent then 
+            Cleanup()
+            return 
+        end
+
+        local Movement = Vector3.new(0, 0, 0)
+        
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then Movement = Movement + Camera.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then Movement = Movement - Camera.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then Movement = Movement - Camera.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then Movement = Movement + Camera.CFrame.RightVector end
+        
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then Movement = Movement + Vector3.new(0, 1, 0) end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then Movement = Movement - Vector3.new(0, 1, 0) end
+
+        FlyState.BV.Velocity = (Movement.Magnitude > 0) and (Movement.Unit * Speed) or Vector3.new(0, 0, 0)
+        FlyState.BG.CFrame = Camera.CFrame
+    end)
 end
 
 return PlayerUtils

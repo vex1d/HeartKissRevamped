@@ -436,19 +436,19 @@ function  Library:Tab(text: string)
                     OptBtn.Parent = OptionContainer
                     CreateGradient(OptBtn)
                     
-                    OptBtn.MouseButton1Click:Connect(function()
+                    table.insert(connections, OptBtn.MouseButton1Click:Connect(function()
                         Title.Text = text .. " : " .. opt
                         isDropped = false
                         Icon.Text = "+"
                         TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                         callback(opt)
-                    end)
+                    end))
                 end
             end
 
             BuildOptions(options)
 
-            Header.MouseButton1Click:Connect(function()
+            table.insert(connections, Header.MouseButton1Click:Connect(function()
                 isDropped = not isDropped
                 if isDropped then
                     Icon.Text = "-"
@@ -458,7 +458,7 @@ function  Library:Tab(text: string)
                     Icon.Text = "+"
                     TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 30)}):Play()
                 end
-            end)
+            end))
 
             local DropdownObject = {}
             function DropdownObject:Refresh(newList)
