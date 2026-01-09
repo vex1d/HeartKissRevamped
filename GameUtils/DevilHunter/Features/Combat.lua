@@ -248,7 +248,6 @@ local function SetupCharacer(Character: Model)
 
         local Player = Players:GetPlayerFromCharacter(Character)
         if Player == lPlayer then return end
-        if not lPlayer.Character or not lPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
         if not Character:FindFirstChild("HumanoidRootPart") then return end
 
         local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
@@ -266,6 +265,8 @@ local function SetupCharacer(Character: Model)
                 task.wait()
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
             end)
+        else
+            warn("Parry Timings not found for ID: " .. IDNumber)
         end
     end)
 end
