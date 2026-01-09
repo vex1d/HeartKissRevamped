@@ -100,13 +100,12 @@ function Missions.RunCleanup(ID, MissionType)
         task.wait(1)
     end
 
-    -- 5. Teleport and Turn In
+
     print("Turning in mission...")
     root.CFrame = TurnInPoint.CFrame * CFrame.new(0, -20, 0)
-    task.wait(0.2) -- Small delay to allow physics to update before interacting
+    task.wait(0.2)
     PlayerUtils:SpamPrompt(TurnInPrompt, 50)
 
-    -- Cleanup
     PlayerUtils:Float(false)
     PlayerUtils:SetNoclip(false)
     
