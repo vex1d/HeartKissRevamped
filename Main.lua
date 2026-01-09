@@ -4,7 +4,7 @@ local PlaceIds = require("PlaceIds")
 
 repeat task.wait() until Players.LocalPlayer ~= nil
 
-local Version = "0.0.1"
+local Version = "0.0.11"
 warn("[HeartKiss Revamped] Loading... ", Version)
 
 local function LoadGame()

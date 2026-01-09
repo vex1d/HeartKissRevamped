@@ -12,14 +12,12 @@ Combat.FireArmSkills = {}
 Combat.MiscSkills = {}
 
 function Combat.GetWeaponType()
-    repeat
-        task.wait(1)
-    until lPlayer.Character
-     
     local Character = lPlayer.Character or lPlayer.CharacterAdded:Wait()
-    local WeaponType = Character.Info.WeaponType
-    
-    return WeaponType
+    local Info = Character:WaitForChild("Info", 10)
+    if Info then
+        return Info:WaitForChild("WeaponType", 10)
+    end
+    return nil
 end
 
 function Combat.GetSkills()

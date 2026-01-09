@@ -27,7 +27,12 @@ local Raidfarm = AutoFarm:Section("Raids")
 
 print(CombatModule.GetSkills())
 
-local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
+local AllSkills = CombatModule.GetSkills()
+local KatanaSkills = AllSkills.Katana
+local FistSkills = AllSkills.Fist
+local DaggerSkills = AllSkills.Dagger
+local FireArmSkills = AllSkills.FireArm
+local MiscSkills = AllSkills.Misc
 
 local SelectedSkills = {
     Slot1 = nil,
