@@ -52,14 +52,13 @@ function Missions.RunCleanup(ID, MissionType)
     end
 
     local arrived = false
-    
-    local startWait = tick()
+    local startWait = os.clock()
     repeat
         if root and (root.Position - TeleportPoint.Position).Magnitude < 20 then
             arrived = true
         end
         task.wait(0.1)
-    until arrived or (tick() - startWait > 8)
+    until arrived or (os.clock() - startWait > 8)
 
     if not arrived then
         warn("Game did not teleport character. Forcing teleport.")
@@ -84,9 +83,9 @@ function Missions.RunCleanup(ID, MissionType)
     
     local TurnInPoint = MissionAsset:WaitForChild("TurnIn", 20)
     if not TurnInPoint then
-            warn("TurnIn Part did not spawn in time!")
-            return
-        end
+        warn("TurnIn Part did not spawn in time!")
+        return
+    end
 
     local TurnInPrompt = TurnInPoint:WaitForChild("Prompt", 20)
     

@@ -10,8 +10,15 @@ local lplayer = Players.LocalPlayer
 local AutoRaids = {}
 AutoRaids.AutoRaidsEnabled = false
 
+local function IsRaidInstance()
+    if game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0 then
+        return true
+    end
+    return false
+end
+
 local function AutoYakuzaRaid()
-    print("Starting Yakuza Raid...")
+    print("Starting Yakuza Raid Logic...")
     local Character = lplayer.Character or lplayer.CharacterAdded:Wait()
     local Root = Character:WaitForChild("HumanoidRootPart")
 
@@ -38,7 +45,7 @@ local function AutoYakuzaRaid()
             local targets = Entities:GetChildren()
             
             if #targets > 0 then
-                for _, entity in pairs(targets) do
+                for _, entity in targets do
                     if entity ~= Character and entity:FindFirstChild("HumanoidRootPart") then
                         Character:PivotTo(entity:GetPivot() * CFrame.new(0, 0, 3)) 
                     end
@@ -48,6 +55,7 @@ local function AutoYakuzaRaid()
         end
     end)
 
+    -- [KILL AURA LOOP]
     task.spawn(function()
         while AutoRaids.AutoRaidsEnabled do
             local hitbox = Character:FindFirstChild("Hitbox")
@@ -69,6 +77,11 @@ local function AutoYakuzaRaid()
 end
 
 function AutoRaids.Init()
+    if not IsRaidInstance() then
+        warn("Attempted to Init AutoRaid in Lobby! Aborting.")
+        return
+    end
+
     AutoRaids.AutoRaidsEnabled = true
     
     local Files = ReplicatedStorage:WaitForChild("Files")
@@ -82,21 +95,20 @@ function AutoRaids.StartRaid(RaidName: string)
     local TargetPlaceId = RaidData[RaidName]
     
     if not TargetPlaceId then 
-        warn("Invalid Raid Name or ID missing") 
+        warn("Invalid Raid Name") 
         return 
     end
 
-    if game.PlaceId == TargetPlaceId then
-        print("Already in raid, initializing...")
-        -- AutoRaids.Init()
+    if game.PlaceId == TargetPlaceId and IsRaidInstance() then
+        print("Raid Instance Detected. Initializing...")
+        AutoRaids.Init()
     else
-        print("Teleporting to " .. RaidName .. " (" .. TargetPlaceId .. ")")
+        print("Lobby Detected. Teleporting to Raid...")
         
-
         if queue_on_teleport then
             queue_on_teleport([[
                 repeat task.wait() until game:IsLoaded()
-                -- PASTE YOUR LOADSTRING HERE vvv
+                -- Ensure you load your script here
                 loadstring(game:HttpGet("YOUR_SCRIPT_URL_HERE"))()
             ]])
         end
