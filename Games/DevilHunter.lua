@@ -27,8 +27,6 @@ local ConfigsTab = window:Tab("Configs")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
-local MiscSection = MiscTab:Section("Settings")
-
 local AllSkills = CombatModule.GetSkills()
 local KatanaSkills = AllSkills.Katana
 local FistSkills = AllSkills.Fist
@@ -85,6 +83,10 @@ PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
 end)
 
 --------------------------Combat Tab--------------------------
+
+CombatSection:Toggle("No Dash CD", function(state)
+    CombatModule.NoDashCD(state)
+end)
 
 local WeaponType = CombatModule.GetWeaponType()
 local currentWeaponName = "None"

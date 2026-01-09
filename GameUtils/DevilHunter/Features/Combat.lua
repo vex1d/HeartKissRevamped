@@ -74,7 +74,8 @@ function Combat.GetCurrentSkillList(weponType: string)
     else return Combat.MiscSkills end
 end
 
-function Combat.NoDashCD()
+local OldTagHandlerAdd = nil
+function Combat.NoDashCD(Toggle: boolean)
     local Files = ReplicatedStorage:WaitForChild("Files")
     local Framework = require(Files:WaitForChild("Framework"))
     local TagHandler = Framework:GetModule("TagHandler")
@@ -98,15 +99,26 @@ function Combat.NoDashCD()
     }
     
 
-    local oldAdd = TagHandler.Add
-    TagHandler.Add = function(Character, TagName)
-        if IgnoredTags[TagName] then
-            warn("Blocked Dash!")
-            return nil
+    OldTagHandlerAdd = TagHandler.Add
+    if Toggle then
+        TagHandler.Add = function(Character, TagName)
+            if IgnoredTags[TagName] then
+                return nil
+            end
+            
+            return OldTagHandlerAdd(Character, TagName)
         end
-        
-        return oldAdd(Character, TagName)
+    else
+        TagHandler.Add = OldTagHandlerAdd
     end
+    -- TagHandler.Add = function(Character, TagName)
+    --     if IgnoredTags[TagName] then
+    --         warn("Blocked Dash!")
+    --         return nil
+    --     end
+        
+    --     return oldAdd(Character, TagName)
+    -- end
 end
 
 function Combat.NoDashStun()
