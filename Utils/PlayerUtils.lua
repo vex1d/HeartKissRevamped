@@ -170,4 +170,85 @@ function PlayerUtils.ToggleConstantFullbright(Enabled: boolean)
     end
 end
 
+
+
+local PlayerUtils = {}
+local ESP_Folder = nil
+local ESP_Connection = nil
+function PlayerUtils.ToggleESP(Enabled: boolean)
+    if not Enabled then
+        if ESP_Connection then ESP_Connection:Disconnect() ESP_Connection = nil end
+        if ESP_Folder then ESP_Folder:Destroy() ESP_Folder = nil end
+        return
+    end
+
+    ESP_Folder = Instance.new("Folder")
+    ESP_Folder.Name = "HeartKiss_ESP"
+    ESP_Folder.Parent = game:GetService("CoreGui")
+
+    local function CreateESP(player)
+        if player == lPlayer then return end
+
+        local function Setup(character)
+            local root = character:WaitForChild("HumanoidRootPart", 10)
+            local hum = character:WaitForChild("Humanoid", 10)
+            if not root or not hum then return end
+
+            local bb = Instance.new("BillboardGui")
+            bb.Name = player.Name
+            bb.Adornee = root
+            bb.Size = UDim2.new(0, 100, 0, 50)
+            bb.StudsOffset = Vector3.new(0, 3, 0)
+            bb.AlwaysOnTop = true
+            bb.Parent = ESP_Folder
+
+            local infoLabel = Instance.new("TextLabel")
+            infoLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            infoLabel.BackgroundTransparency = 1
+            infoLabel.TextColor3 = Color3.new(1, 1, 1)
+            infoLabel.Font = Enum.Font.Code
+            infoLabel.TextSize = 12
+            infoLabel.TextStrokeTransparency = 0
+            infoLabel.Parent = bb
+
+            local healthBg = Instance.new("Frame")
+            healthBg.Size = UDim2.new(0.8, 0, 0, 4)
+            healthBg.Position = UDim2.new(0.1, 0, 0.7, 0)
+            healthBg.BackgroundColor3 = Color3.new(0, 0, 0)
+            healthBg.BorderSizePixel = 0
+            healthBg.Parent = bb
+
+            local healthFill = Instance.new("Frame")
+            healthFill.Size = UDim2.new(1, 0, 1, 0)
+            healthFill.BackgroundColor3 = Color3.new(0, 1, 0)
+            healthFill.BorderSizePixel = 0
+            healthFill.Parent = healthBg
+
+            local conn
+            conn = RunService.RenderStepped:Connect(function()
+                if not Enabled or not player.Parent or not character.Parent then
+                    bb:Destroy()
+                    conn:Disconnect()
+                    return
+                end
+
+                local dist = math.floor((root.Position - lPlayer.Character.HumanoidRootPart.Position).Magnitude)
+                infoLabel.Text = string.format("%s\n[%d m]", player.Name, dist)
+                
+                local healthPercent = hum.Health / hum.MaxHealth
+                healthFill.Size = UDim2.new(math.clamp(healthPercent, 0, 1), 0, 1, 0)
+                
+                healthFill.BackgroundColor3 = Color3.new(1, 0, 0):Lerp(Color3.new(0, 1, 0), healthPercent)
+            end)
+        end
+
+        player.CharacterAdded:Connect(Setup)
+        if player.Character then task.spawn(Setup, player.Character) end
+    end
+
+    for _, player in Players:GetPlayers() do CreateESP(player) end
+    ESP_Connection = Players.PlayerAdded:Connect(CreateESP)
+end
+
+
 return PlayerUtils

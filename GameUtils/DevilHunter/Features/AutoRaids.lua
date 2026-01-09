@@ -2,8 +2,11 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
 
+
+--136364146980997
 local RaidData = {
     ["Yakuza Infiltration"] = 136364146980997,
+    
 }
 
 local lplayer = Players.LocalPlayer

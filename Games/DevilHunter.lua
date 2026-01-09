@@ -51,11 +51,12 @@ PlayerSection:Toggle("Toggle Walk Speed", function(state)
 end)
 
 PlayerSection:Slider("Speed", 16, 150, 16, function(value)
+    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
     if not WalkSpeedEnabled then
+        humanoid.WalkSpeed = 16
         return
     end
 
-    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
     humanoid.WalkSpeed = value
 end)
 
@@ -76,6 +77,13 @@ PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
 end)
 
 --------------------------Combat Tab--------------------------
+CombatSection:Toggle("Auto Parry", function(state)
+    CombatModule.AutoParry(state)
+end)
+
+CombatSection:Slider("Distance", 1, 50, 0, function(value)
+    CombatModule.ParryDistance = value
+end)
 
 CombatSection:Toggle("No Dash CD", function(state)
     CombatModule.NoDashCD(state)
@@ -85,7 +93,7 @@ CombatSection:Toggle("No WallJump CD", function(state)
     CombatModule.NoWallJumpCD(state)
 end)
 
-CombatSection:Toggle("Bypass Skill Requirements", function(state)
+CombatSection:Toggle("Bypass Skill Requirements (buggy)", function(state)
     CombatModule.BypassSkillRequirements(state)
 end)
 
@@ -166,22 +174,22 @@ AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
     end
 end)
 
-local SelectedRaid = nil
-Raidfarm:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse", "Yakuza Infiltration"}, function(selected: string)
-    SelectedRaid = selected
-end)
+-- local SelectedRaid = nil
+-- Raidfarm:Dropdown("Raids", {"Mysterious Hotel", "Zombie Devil Warehouse", "Yakuza Infiltration"}, function(selected: string)
+--     SelectedRaid = selected
+-- end)
 
-Raidfarm:Button("Start Raid", function()
-    if SelectedRaid then
-        RaidsModule.StartRaid(SelectedRaid)
-    end
-end)
+-- Raidfarm:Button("Start Raid", function()
+--     if SelectedRaid then
+--         RaidsModule.StartRaid(SelectedRaid)
+--     end
+-- end)
 
 
 -------------------MISC TAB-------------------
 local MiscSection = MiscTab:Section("Misc")
 MiscSection:Toggle("Toggle ESP", function(state)
-
+    PlayerUtils.ToggleESP(state)
 end)
 
 -------------------SETTINGS TAB-------------------

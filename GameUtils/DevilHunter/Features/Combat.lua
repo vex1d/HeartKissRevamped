@@ -5,6 +5,8 @@ local lPlayer = Players.LocalPlayer
 
 local Combat = {}
 
+Combat.ParryDistance = 10
+
 Combat.KatanaSkills = {}
 Combat.FistSkills = {}
 Combat.DaggerSkills = {}
@@ -38,7 +40,7 @@ function Combat.GetSkills()
         
         if requiredWeapon then
             local function sortSkill(wep)
-                if wep == "Katana" or wep == "Sword" or wep == "KatanaHybrid" then table.insert(Combat.KatanaSkills, skillName)
+                if wep == "Katana" then table.insert(Combat.KatanaSkills, skillName)
                 elseif wep == "Fist" then table.insert(Combat.FistSkills, skillName)
                 elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
                 elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
