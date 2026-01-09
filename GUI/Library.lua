@@ -571,7 +571,7 @@ function  Library:Tab(text: string)
             ElementCount = ElementCount + 1
             
             callback = callback or function() end
-            local CurrentKey = defaultKey or Enum.KeyCode.None
+            local CurrentKey = defaultKey or nil
             local isBinding = false
 
             local KeybindFrame = Instance.new("Frame")
@@ -636,7 +636,7 @@ function  Library:Tab(text: string)
             local enabled = false
 
             callback = callback or function() end
-            local CurrentKey = defaultKey or Enum.KeyCode.None
+            local CurrentKey = defaultKey or nil
             local isBinding = false
 
             local KeybindFrame = Instance.new("Frame")
