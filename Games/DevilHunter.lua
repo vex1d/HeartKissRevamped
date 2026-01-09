@@ -60,7 +60,7 @@ PlayerSection:Slider("Speed", 16, 350, 16, function(value)
         return
     end
     local humanoid = lPlayer.Character:FindFirstChild("Humanoid")
-    humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+    walkspeedCon = humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
         humanoid.WalkSpeed = value
     end)
     humanoid.WalkSpeed = value
@@ -86,6 +86,10 @@ end)
 
 CombatSection:Toggle("No Dash CD", function(state)
     CombatModule.NoDashCD(state)
+end)
+
+CombatSection:Toggle("No WallJump CD", function(state)
+    CombatModule.NoWallJumpCD(state)
 end)
 
 local WeaponType = CombatModule.GetWeaponType()

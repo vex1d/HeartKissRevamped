@@ -119,6 +119,27 @@ function Combat.NoDashCD(Toggle: boolean)
     end
 end
 
+local WallJumpCon = nil
+function Combat.NoWallJumpCD(Toggle: boolean)
+    local RunService = game:GetService("RunService")
+    local Framework = require(ReplicatedStorage.Files.Framework)
+    local MovementHandler = Framework:GetModule("MovementHandler")
+
+    if Toggle then
+        WallJumpCon =  RunService.Stepped:Connect(function()
+            if MovementHandler.WallJumpCooldowns then
+                table.clear(MovementHandler.WallJumpCooldowns)
+            end
+        end)
+    else
+        if WallJumpCon then
+            WallJumpCon:Disconnect()
+            WallJumpCon = nil
+        end
+    end
+end
+
+
 function Combat.NoDashStun()
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Files = ReplicatedStorage:WaitForChild("Files")
