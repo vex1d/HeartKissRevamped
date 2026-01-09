@@ -81,38 +81,41 @@ function Missions.RunCleanup(ID, MissionType)
     PlayerUtils:SpamPrompt(TPrompt, AUTOFARM_CONFIG.InteractAttempts)
 
     root.CFrame = AUTOFARM_CONFIG.SafeZonePos * CFrame.new(0, 5, 0)
-
-    task.wait(3)
-
-    local TurnInPoint = MissionAsset:FindFirstChild("TurnIn")
     
-    -- while not TurnInPoint:FindFirstChild("Prompt") do
-    --     task.wait(1)
-    -- end
-
-    if TurnInPoint then
-        while PlayerUtils:CheckForClosePlayers(TurnInPoint, AUTOFARM_CONFIG.SafeDistance) do
-            warn("Player nearby, waiting...")
-            task.wait(1)
+    local TurnInPoint = MissionAsset:WaitForChild("TurnIn", 20)
+    if not TurnInPoint then
+            warn("TurnIn Part did not spawn in time!")
+            return
         end
 
-        local TurnInPrompt = TurnInPoint:FindFirstChild("Prompt")
-        if TurnInPrompt then
-            root.CFrame = TurnInPoint.CFrame * CFrame.new(0, -20, 0)
-            PlayerUtils:SpamPrompt(TurnInPrompt, 50)
-        end
-    else
-        warn("TurnIn Point not found")
+    local TurnInPrompt = TurnInPoint:WaitForChild("Prompt", 20)
+    
+    if not TurnInPrompt then
+        warn("TurnIn Prompt did not appear in time!")
+        return
+    end
+    
+    while PlayerUtils:CheckForClosePlayers(TurnInPoint, AUTOFARM_CONFIG.SafeDistance) do
+        warn("Player nearby, waiting...")
+        task.wait(1)
     end
 
+    -- 5. Teleport and Turn In
+    print("Turning in mission...")
+    root.CFrame = TurnInPoint.CFrame * CFrame.new(0, -20, 0)
+    task.wait(0.2) -- Small delay to allow physics to update before interacting
+    PlayerUtils:SpamPrompt(TurnInPrompt, 50)
+
+    -- Cleanup
     PlayerUtils:Float(false)
     PlayerUtils:SetNoclip(false)
+    
     local finalRoot = PlayerUtils:GetRoot()
     if finalRoot then
         finalRoot.CanCollide = false
         finalRoot.CFrame = AUTOFARM_CONFIG.EndZonePos
     end
-    
+
     print("Mission Cycle Complete")
 end
 
