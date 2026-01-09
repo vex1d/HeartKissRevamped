@@ -8,15 +8,21 @@ local Version = "0.0.1"
 warn("[HeartKiss Revamped] Loading... ", Version)
 
 local function LoadGame()
+    local found = false
     for gameName, ids in PlaceIds do
-        for _, id in ids do
-            if game.PlaceId == id then
+        if table.find(ids, game.PlaceId) then
+            found = true
+            local success, err = pcall(function()
                 require("Games/" .. gameName)
-                -- print(gameName)
-            else
-                warn("Game not loaded: " .. gameName)    
+            end)
+            if not success then 
+                warn("Error in Game Module: " .. err)
             end
+            break 
         end
+    end
+    if not found then
+        warn("Place ID " .. game.PlaceId .. " not supported.")
     end
 end
 

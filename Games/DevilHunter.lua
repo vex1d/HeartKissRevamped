@@ -25,8 +25,8 @@ local CombatSection = MainTab:Section("Combat")
 local AutofarmMissions = AutoFarm:Section("Missions")
 local Raidfarm = AutoFarm:Section("Raids")
 
-
 print(CombatModule.GetSkills())
+
 local KatanaSkills, FistSkills, DaggerSkills, FireArmSkills, MiscSkills = CombatModule.GetSkills()
 
 local SelectedSkills = {
@@ -36,24 +36,17 @@ local SelectedSkills = {
 }
 
 local WeaponType = CombatModule.GetWeaponType()
-warn("Got WeaponType: ", WeaponType.Value)
-
 local currentWeaponName = "None"
-
 if WeaponType then
     currentWeaponName = WeaponType.Value
 end
-
-print("Current Weapon: " .. currentWeaponName)
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
 
 if WeaponType then
     WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
-        weaponTypeLabel:SetText("Current Weapon: " .. tostring(WeaponType.Value))
+        weaponTypeLabel.Text = "Current Weapon: " .. tostring(WeaponType.Value)
     end)
-else
-    warn("Failed to get WeaponType: ", WeaponType.Value)
 end
 
 CombatSection:Dropdown("Skill Slot 1", KatanaSkills, function(selected)
