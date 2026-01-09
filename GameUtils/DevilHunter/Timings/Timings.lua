@@ -1,4 +1,91 @@
-local ParryTimings = {}
+local animations = {
+    human = {
+        {Name = "KaijuCrusher2", ID = 114393492422894, Delay = 0.1},
+        {Name = "DevilCrusher1", ID = 72716101431005, Delay = 0.1},
+        {Name = "DevilCrusher4", ID = 102225002431566, Delay = 0.1},
+        {Name = "FistAerial", ID = 91695353081923, Delay = 0.1},
+        {Name = "DevilCrusherCrit", ID = 91841671178746, Delay = 1},
+        {Name = "DevilCrusher3", ID = 98961744431023, Delay = 0.1},
+    },
+    pistol = {
+        {Name = "Pistol3", ID = 121073263747297, Delay = 0.1},
+        {Name = "Pistol4", ID = 93431132327822, Delay = 0.1},
+        {Name = "Pistol1", ID = 116937962567393, Delay = 0.1},
+        {Name = "PistolCrit", ID = 98375305489054, Delay = 0.5},
+        {Name = "FistAerial", ID = 91695353081923, Delay = 0.05},
+        {Name = "Pistol2", ID = 133853808650941, Delay = 0.1},
+    },
+    ["martial arts"] = {
+        {Name = "Skullcrusher Miss", ID = 115276870777429, Delay = 0.2},
+        {Name = "Bullrush Blitz Miss", ID = 139765911542742, Delay = 0.1},
+        {Name = "Suplex Miss", ID = 111024136790516, Delay = 0.2},
+        {Name = "Spinning_Kick _Animation", ID = 92810019684011, Delay = 0.2},
+        {Name = "Right Hook", ID = 88281715895375, Delay = 0.2},
+    },
+    fists = {
+        {Name = "F4", ID = 75114926121591, Delay = 0.05},
+        {Name = "NewFistCrit", ID = 84882180540900, Delay = 0.4},
+        {Name = "F2", ID = 99785834052081, Delay = 0.05},
+        {Name = "F3", ID = 129319150158146, Delay = 0.05},
+        {Name = "FistAerial", ID = 91695353081923, Delay = 0.1},
+        {Name = "Uppercut", ID = 82402970804238, Delay = 0.1},
+        {Name = "F1", ID = 83170627744442, Delay = 0.05},
+    },
+    katana = {
+        {Name = "K1", ID = 139174098471434, Delay = 0.1},
+        {Name = "SwordCrit", ID = 134137542280552, Delay = 0.4},
+        {Name = "K2", ID = 118176169991277, Delay = 0.1},
+        {Name = "K4", ID = 125571123165138, Delay = 0.1},
+        {Name = "FistAerial", ID = 91695353081923, Delay = 0.07},
+        {Name = "K3", ID = 89332566098222, Delay = 0.1},
+    },
+    fiends = {
+        base = {
+            {Name = "Fiend Bite Miss", ID = 114370481620131, Delay = 0.5},
+            {Name = "Devil's Knuckle", ID = 106191095787074, Delay = 0.3},
+        },
+        blood = {
+            {Name = "DualDagger1", ID = 90303043747701, Delay = 0.05},
+            {Name = "DualDagger2", ID = 73033593102525, Delay = 0.05},
+            {Name = "DualDagger3", ID = 89307684071889, Delay = 0.05},
+            {Name = "DualDagger4", ID = 115670609737438, Delay = 0.05},
+            {Name = "FistAerial", ID = 91695353081923, Delay = 0.05},
+            {Name = "NewFistCrit", ID = 84882180540900, Delay = 0.2},
+        },
+        shark = {
+            {Name = "Shark_1", ID = 107049572669140, Delay = 0.2},
+            {Name = "Shark_2", ID = 116781362921741, Delay = 0.2},
+            {Name = "Shark_4", ID = 126406892829032, Delay = 0.2},
+            {Name = "FistAerial", ID = 91695353081923, Delay = 0.1},
+            {Name = "Shark_3", ID = 124298892076543, Delay = 0.2},
+            {Name = "NewFistCrit", ID = 84882180540900, Delay = 0.4},
+        },
+        angel = {
+            {Name = "AngelSword2", ID = 76827947490912, Delay = 0.1},
+            {Name = "10YearAngel1", ID = 126621054776220, Delay = 0.1},
+            {Name = "AngelSword1", ID = 99419457549732, Delay = 0.1},
+            {Name = "10YearAngelCrit", ID = 134212846921544, Delay = 1},
+            {Name = "10YearAngel4", ID = 105542119244161, Delay = 0.1},
+            {Name = "10YearAngel3", ID = 88464980239593, Delay = 0.1},
+            {Name = "10YearAngel2", ID = 89332259138333, Delay = 0.1},
+            {Name = "5YearSwordCrit", ID = 84627135360921, Delay = 0.08},
+            {Name = "AngelSword3", ID = 133512548611881, Delay = 0.1},
+            {Name = "AngelSword4", ID = 104268439363335, Delay = 0.1},
+            {Name = "100YearsAngelCrit", ID = 78555663054449, Delay = 1.1},
+            {Name = "100Year2", ID = 73086768097069, Delay = 0.1},
+            {Name = "100Year3", ID = 112091281860543, Delay = 0.1},
+            {Name = "100Year1", ID = 89859217236874, Delay = 0.1},
+            {Name = "100Year4", ID = 123135962827332, Delay = 0.1},
+        },
+        nail = {
+            {Name = "F4", ID = 75114926121591, Delay = 0.07},
+            {Name = "F2", ID = 99785834052081, Delay = 0.07},
+            {Name = "NewFistCrit", ID = 84882180540900, Delay = 0.4},
+            {Name = "F3", ID = 129319150158146, Delay = 0.07},
+            {Name = "FistAerial", ID = 91695353081923, Delay = 0.07},
+            {Name = "F1", ID = 83170627744442, Delay = 0.07},
+        }
+    }
+}
 
-
-return ParryTimings
+return animations

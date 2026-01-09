@@ -1,11 +1,15 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local Timings = require("GameUtils/DevilHunter/Timings/Timings")
 
 local lPlayer = Players.LocalPlayer
 
 local Combat = {}
 
 Combat.ParryDistance = 10
+Combat.ParryEnabled = false
 
 Combat.KatanaSkills = {}
 Combat.FistSkills = {}
@@ -217,11 +221,11 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
     local Files = ReplicatedStorage:WaitForChild("Files")
     local Framework = require(Files:WaitForChild("Framework"))
     local SkillLib = Framework:GetModule("SkillLibrary")
-
+    
     if not OldVerify then
         OldVerify = SkillLib.VerifySkill
     end
-
+    
     if Toggle then
         SkillLib.VerifySkill = function(...)
             local Args = {...}
@@ -241,5 +245,57 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
         end
     end
 end
+
+local ParryTimings = {}
+local function FlattenAnimations(Table)
+    for Key, Value in Table do
+        if type(Value) == "table" then
+            if Value.ID and Value.Delay then
+                ParryTimings[tonumber(Value.ID)] = Value.Delay
+            else
+                FlattenAnimations(Value)
+            end
+        end
+    end
+end
+FlattenAnimations(Timings)
+
+local function SetupPlayer(Player: Player)
+    Player.CharacterAdded:Connect(function(Character)
+        local humanoid = Character:WaitForChild("Humanoid", 5)
+        local animator = humanoid and humanoid:WaitForChild("Animator", 5)
+        if not animator then return end
+
+        animator.AnimationPlayed:Connect(function(Track)
+            if not Combat.Enabled then return end
+            if Player == lPlayer then return end
+
+            local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
+            if distance > Combat.ParryDistance then
+                return
+            end
+
+            local AnimID = Track.Animation.AnimationId
+            local IDNumber = tonumber(string.match(AnimID, "%d+"))
+            local Delay = ParryTimings[IDNumber] or 0.2
+
+            task.delay(Delay, function()
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
+                task.wait(0)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
+            end)
+        end)
+    end)
+end
+
+local ParryCon = nil
+function Combat.AutoParry(Enabled: boolean)
+    Combat.ParryEnabled = Enabled
+end
+
+for _, Player in Players:GetPlayers() do
+    SetupPlayer(Player)
+end
+Players.PlayerAdded:Connect(SetupPlayer)
 
 return Combat
