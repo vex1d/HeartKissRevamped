@@ -247,8 +247,8 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
 end
 
 local ParryTimings = {}
-local function FlattenAnimations(Table)
-    for Key, Value in Table do
+local function FlattenAnimations(TimingTable: table)
+    for Key, Value in TimingTable do
         if type(Value) == "table" then
             if Value.ID and Value.Delay then
                 ParryTimings[tonumber(Value.ID)] = Value.Delay
@@ -267,7 +267,11 @@ local function SetupCharacer(Character: Model)
 
     animator.AnimationPlayed:Connect(function(Track)
         if not Combat.Enabled then return end
+
+        local Player = Players:GetPlayerFromCharacter(Character)
         if Player == lPlayer then return end
+        if not lPlayer.Character or not lPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+        if not Character:FindFirstChild("HumanoidRootPart") then return end
 
         local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
         if distance > Combat.ParryDistance then
@@ -276,36 +280,43 @@ local function SetupCharacer(Character: Model)
 
         local AnimID = Track.Animation.AnimationId
         local IDNumber = tonumber(string.match(AnimID, "%d+"))
-        local Delay = ParryTimings[IDNumber] or 0.2
+        local Delay = ParryTimings[IDNumber]
 
-        task.delay(Delay, function()
-            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
-            task.wait(0)
-            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
-        end)
+        if Delay then
+            task.delay(Delay, function()
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
+                task.wait()
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
+            end)
+        end
     end)
 end
 
 
-local function SetupPlayer(Player: Player)
+local function SetupPlayer(Player)n
     Player.CharacterAdded:Connect(function(Character)
-       SetupPlayer(Character)
+       SetupCharacter(Character) 
     end)
 
-    local Character = Player.Character
-    if Character then
-        SetupCharacer(Character)
+    if Player.Character then
+        SetupCharacter(Player.Character)
     end
 end
 
-local ParryCon = nil
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
 end
 
 for _, Player in Players:GetPlayers() do
-    SetupPlayer(Player)
+    if Player ~= lPlayer then
+        SetupPlayer(Player)
+    end
 end
-Players.PlayerAdded:Connect(SetupPlayer)
+
+Players.PlayerAdded:Connect(function(Player)
+    if Player ~= lPlayer then
+        SetupPlayer(Player)
+    end
+end)
 
 return Combat
