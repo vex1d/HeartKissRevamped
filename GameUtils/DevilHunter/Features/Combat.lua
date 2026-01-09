@@ -293,13 +293,13 @@ local function SetupCharacer(Character: Model)
 end
 
 
-local function SetupPlayer(Player)n
+local function SetupPlayer(Player)
     Player.CharacterAdded:Connect(function(Character)
-       SetupCharacter(Character) 
+       SetupCharacer(Character) 
     end)
 
     if Player.Character then
-        SetupCharacter(Player.Character)
+        SetupCharacer(Player.Character)
     end
 end
 
