@@ -244,6 +244,18 @@ local function GetInfo(id)
     end
 end
 
+local ParsedTimings = {}
+local function Flatten(tbl)
+    for key, value in tbl do
+        if type(value) == "table" then
+            if value.ID and value.Delay then
+                ParsedTimings[value.ID] = value.Delay
+            else
+                Flatten(value)
+            end
+        end
+    end
+end
 
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
@@ -281,20 +293,16 @@ function Combat.AutoParry(Enabled: boolean)
             -- if not WeaponInfo then return end
 
             local id = tonumber(track.Animation.AnimationId:match("%d+"))
-            
-            for name, data in Timings do
-                if id == data.ID then
-                    local info = GetInfo(id)
-                    local Delay = data.Delay
-                    
-                    task.delay(Delay, function()
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
-                        task.wait()
-                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
-                    end)
+            if not id then return end
 
-                    break
-                end
+            local manualDelay = ParsedTimings[id]
+            
+            if manualDelay then
+                task.delay(manualDelay, function()
+                    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+                    task.wait()
+                    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+                end)
             end
         end)
 
