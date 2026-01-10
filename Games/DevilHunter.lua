@@ -81,7 +81,7 @@ CombatSection:Toggle("Auto Parry", function(state)
     CombatModule.AutoParry(state)
 end)
 
-CombatSection:Slider("Distance", 1, 90000000, 0, function(value)
+CombatSection:Slider("Distance", 1, 150, 0, function(value)
     CombatModule.ParryDistance = value
 end)
 
