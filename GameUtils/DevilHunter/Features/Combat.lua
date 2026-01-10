@@ -253,6 +253,10 @@ function Combat.AntiFling(Enabled: boolean)
             flingCon:Disconnect()
             flingCon = nil
         end
+
+        if rootPart:FindFirstChild("AntiFling") then
+            rootPart.AntiFling:Destroy()
+        end
     end
 end
 
