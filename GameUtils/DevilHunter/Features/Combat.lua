@@ -95,6 +95,8 @@ function Combat.NoDashCD(Toggle: boolean)
         elseif TagHandler.Get(Character, "SuperDashCD") then
             TagHandler.Remove(Character, "SuperDashCD")
         end
+
+        task.wait()
     end
 end
 
@@ -242,6 +244,7 @@ function Combat.AutoParry(Enabled: boolean)
     local Skills = ReplicatedStorage.Files.Modules.Shared.Encyclopedia.Skills
     local WeaponLibrary = require(ReplicatedStorage.Files.Modules.Libraries.WeaponLibrary)
     local DefaultData = WeaponLibrary.DefaultData
+
 
     local function ConnectEntity(entity)
         if entity == Character or Connections[entity] then return end
