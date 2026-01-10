@@ -224,6 +224,7 @@ local AttackPatterns = {
     "Dagger%d",
     "DualDagger%d",
     "Uppercut",
+    "Crit"
 }
 
 local function GetInfo(id)
