@@ -209,23 +209,7 @@ end
 
 local Connections = {}
 local AnimationCache = {} 
-local AttackPatterns = {
-    "Aerial",
-    "AerialAttack",
-    "Attack",
-    "Swing", 
-    "Slash", 
-    "M%d", 
-    "K%d", 
-    "F%d",
-    "Angel%d",
-    "AngelSword",
-    "YearAngel",
-    "Dagger%d",
-    "DualDagger%d",
-    "Uppercut",
-    "Crit"
-}
+local ParsedTimings = {}
 
 local function GetInfo(id)
     if AnimationCache[id] then
@@ -244,7 +228,6 @@ local function GetInfo(id)
     end
 end
 
-local ParsedTimings = {}
 local function Flatten(tbl)
     for key, value in tbl do
         if type(value) == "table" then
@@ -285,9 +268,9 @@ function Combat.AutoParry(Enabled: boolean)
             if distance > Combat.ParryDistance then return end
 
             local Info = entity:FindFirstChild("Info")
-            local WeaponType = Info and Info:FindFirstChild("WeaponType")
+            -- local WeaponType = Info and Info:FindFirstChild("WeaponType")
             
-            if not WeaponType then return end
+            -- if not WeaponType then return end
             
             -- local WeaponInfo = DefaultData[WeaponType.Value]
             -- if not WeaponInfo then return end
