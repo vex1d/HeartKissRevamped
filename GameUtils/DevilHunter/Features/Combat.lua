@@ -114,7 +114,7 @@ function Combat.NoWallJumpCD(Toggle: boolean)
     local MovementHandler = Framework:GetModule("MovementHandler")
 
     if Toggle then
-        WallJumpCon = RunService.RenderSteppedStepped:Connect(function()
+        WallJumpCon = RunService.RenderStepped:Connect(function()
             if MovementHandler.WallJumpCooldowns then
                 table.clear(MovementHandler.WallJumpCooldowns)
             end
