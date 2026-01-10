@@ -1,6 +1,7 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local lPlayer = Players.LocalPlayer
@@ -80,7 +81,7 @@ function Combat.GetCurrentSkillList(weponType: string)
     else return Combat.MiscSkills end
 end
 
-local con
+local DashCon = nil
 function Combat.NoDashCD(Toggle: boolean)
     local Files = ReplicatedStorage:WaitForChild("Files")
     local Framework = require(Files:WaitForChild("Framework"))
@@ -89,14 +90,20 @@ function Combat.NoDashCD(Toggle: boolean)
     local MovementHandler = Framework:GetModule("MovementHandler")
 
     local Character = lPlayer.Character
-    while Toggle == true do
-        if TagHandler.Get(Character, "DashCD") then
-            TagHandler.Remove(Character, "DashCD")
-        elseif TagHandler.Get(Character, "SuperDashCD") then
-            TagHandler.Remove(Character, "SuperDashCD")
+    if Toggle then
+        DashCon = RunService.RenderStepped:Connect(function()
+            
+            if TagHandler.Get(Character, "DashCD") then
+                TagHandler.Remove(Character, "DashCD")
+            elseif TagHandler.Get(Character, "SuperDashCD") then
+                TagHandler.Remove(Character, "SuperDashCD")
+            end
+        end)
+    else
+        if DashCon then
+            DashCon:Disconnect()
+            DashCon = nil
         end
-
-        task.wait()
     end
 end
 
@@ -107,7 +114,7 @@ function Combat.NoWallJumpCD(Toggle: boolean)
     local MovementHandler = Framework:GetModule("MovementHandler")
 
     if Toggle then
-        WallJumpCon =  RunService.Stepped:Connect(function()
+        WallJumpCon = RunService.RenderSteppedStepped:Connect(function()
             if MovementHandler.WallJumpCooldowns then
                 table.clear(MovementHandler.WallJumpCooldowns)
             end
