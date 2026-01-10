@@ -45,11 +45,15 @@ function Combat.GetSkills()
         
         if requiredWeapon then
             local function sortSkill(wep)
-                if wep == "Katana" then table.insert(Combat.KatanaSkills, skillName)
-                elseif wep == "Fist" then table.insert(Combat.FistSkills, skillName)
-                elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
-                elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
-                end
+                -- if wep == "Katana" then table.insert(Combat.KatanaSkills, skillName)
+                -- elseif wep == "Fist" then table.insert(Combat.FistSkills, skillName)
+                -- elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
+                -- elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
+                -- end
+                table.insert(Combat.KatanaSkills, skillName)
+                table.insert(Combat.FistSkills, skillName)
+                table.insert(Combat.DaggerSkills, skillName)
+                table.insert(Combat.FireArmSkills, skillName)
             end
 
             if typeof(requiredWeapon) == "table" then
