@@ -221,7 +221,8 @@ local AttackPatterns = {
     "Angel%d",
     "AngelSword",
     "YearAngel",
-    "Dagger",
+    "Dagger%d",
+    "DualDagger%d",
     "Uppercut",
 }
 
