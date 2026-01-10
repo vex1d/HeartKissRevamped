@@ -50,10 +50,21 @@ function Combat.GetSkills()
                 -- elseif wep == "Dagger" then table.insert(Combat.DaggerSkills, skillName)
                 -- elseif wep == "FireArm" then table.insert(Combat.FireArmSkills, skillName)
                 -- end
-                table.insert(Combat.KatanaSkills, skillName)
-                table.insert(Combat.FistSkills, skillName)
-                table.insert(Combat.DaggerSkills, skillName)
-                table.insert(Combat.FireArmSkills, skillName)
+                if not table.find(Combat.KatanaSkills, skillName) then
+                    table.insert(Combat.KatanaSkills, skillName)
+                end
+
+                if not table.find(Combat.FistSkills, skillName) then
+                    table.insert(Combat.FistSkills, skillName)
+                end
+
+                if not table.find(Combat.DaggerSkills, skillName) then
+                    table.insert(Combat.DaggerSkills, skillName)
+                end
+
+                if not table.find(Combat.FireArmSkills, skillName) then
+                    table.insert(Combat.FireArmSkills, skillName)
+                end
             end
 
             if typeof(requiredWeapon) == "table" then
