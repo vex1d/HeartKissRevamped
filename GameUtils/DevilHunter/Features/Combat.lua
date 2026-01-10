@@ -277,38 +277,23 @@ function Combat.AutoParry(Enabled: boolean)
             
             if not WeaponType then return end
             
-            local WeaponInfo = DefaultData[WeaponType.Value]
-            if not WeaponInfo then return end
+            -- local WeaponInfo = DefaultData[WeaponType.Value]
+            -- if not WeaponInfo then return end
 
             local id = tonumber(track.Animation.AnimationId:match("%d+"))
-            local name = GetInfo(id)
-
-            if name:match(WeaponType.Value) then
-                local shouldParry = false
-                for _, pattern in AttackPatterns do
-                    if name:match(pattern) then
-                        shouldParry = true
-                        break
-                    end
-                end
-
-                if shouldParry then
-                    local baseDelay = WeaponInfo.PauseFrame
-                    local speedMult = WeaponInfo.AnimSpeed or 1
-                    local finalDelay = baseDelay
-    
-                    --local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
-                    --finalDelay = math.max(0, finalDelay - (ping / 2))
-    
-                    print("Parrying: ", name, "Delay: ", finalDelay)
-
-                    task.delay(finalDelay, function()
+            
+            for name, data in Timings do
+                if id == data.ID then
+                    local info = GetInfo(id)
+                    local Delay = data.Delay
+                    
+                    task.delay(Delay, function()
                         VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
                         task.wait()
                         VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
                     end)
-                else
-                    warn("Blocked Attack: " .. name)
+
+                    break
                 end
             end
         end)
