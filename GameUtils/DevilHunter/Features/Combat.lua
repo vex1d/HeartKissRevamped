@@ -1,3 +1,4 @@
+local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -79,7 +80,7 @@ function Combat.GetCurrentSkillList(weponType: string)
     else return Combat.MiscSkills end
 end
 
-local OldTagHandlerAdd = nil
+local con
 function Combat.NoDashCD(Toggle: boolean)
     local Files = ReplicatedStorage:WaitForChild("Files")
     local Framework = require(Files:WaitForChild("Framework"))
@@ -87,39 +88,12 @@ function Combat.NoDashCD(Toggle: boolean)
     local SkillLib = Framework:GetModule("SkillLibrary")
     local MovementHandler = Framework:GetModule("MovementHandler")
 
-    if not OldTagHandlerAdd then
-        OldTagHandlerAdd = TagHandler.Add
-    end
-
-    local IgnoredTags = {
-        ["DashCD"] = true,
-        ["NoSprint"] = true,
-        ["SuperDashCD"] = true,
-        ["Stunned"] = true,
-        ["Knocked"] = true,
-        ["ParryStunned"] = true,
-        ["Ragdolled"] = true,
-        ["Carried"] = true,
-        ["PostureBroken"] = true,
-        ["Mounted"] = true,
-        ["Grabbed"] = true,
-        ["Action"] = true,
-        ["Skateboard"] = true
-    }
-    
-
-   if Toggle then
-        TagHandler.Add = function(Character, TagName)
-            if IgnoredTags[TagName] then
-                -- print("Blocked Tag: " .. tostring(TagName))
-                return nil
-            end
-
-            return OldTagHandlerAdd(Character, TagName)
-        end
-    else
-        if OldTagHandlerAdd then
-            TagHandler.Add = OldTagHandlerAdd
+    local Character = lPlayer.Character
+    while Toggle == true do
+        if TagHandler.Get(Character, "DashCD") then
+            TagHandler.Remove(Character, "DashCD")
+        elseif TagHandler.Get(Character, "SuperDashCD") then
+            TagHandler.Remove(Character, "SuperDashCD")
         end
     end
 end
@@ -224,77 +198,90 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
     end
 end
 
-local ParryTimings = {}
-local function FlattenAnimations(TimingTable: table)
-    for Key, Value in TimingTable do
-        if type(Value) == "table" then
-            if Value.ID and Value.Delay then
-                ParryTimings[tonumber(Value.ID)] = Value.Delay
-            else
-                FlattenAnimations(Value)
-            end
-        end
-    end
-end
-FlattenAnimations(Timings)
-
-local function SetupCharacer(Character: Model)
-    local humanoid = Character:WaitForChild("Humanoid", 5)
-    local animator = humanoid and humanoid:WaitForChild("Animator", 5)
-    if not animator then return end
-
-    animator.AnimationPlayed:Connect(function(Track)
-        if not Combat.ParryEnabled then return end
-
-        local Player = Players:GetPlayerFromCharacter(Character)
-        if Player == lPlayer then return end
-        if not Character:FindFirstChild("HumanoidRootPart") then return end
-
-        local distance = (lPlayer.Character.HumanoidRootPart.Position - Character.HumanoidRootPart.Position).Magnitude
-        if distance > Combat.ParryDistance then
-            return
-        end
-
-        local AnimID = Track.Animation.AnimationId
-        local IDNumber = tonumber(string.match(AnimID, "%d+"))
-        local Delay = ParryTimings[IDNumber]
-
-        if Delay then
-            task.delay(Delay, function()
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, Character)
-                task.wait()
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, Character)
-            end)
-        else
-            warn("Parry Timings not found for ID: " .. IDNumber)
-        end
-    end)
-end
-
-local function SetupPlayer(Player)
-    Player.CharacterAdded:Connect(function(Character)
-       SetupCharacer(Character) 
-    end)
-
-    if Player.Character then
-        SetupCharacer(Player.Character)
-    end
-end
-
+local Connections = {}
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
-end
 
-for _, Player in Players:GetPlayers() do
-    if Player ~= lPlayer then
-        SetupPlayer(Player)
+    local Character = lPlayer.Character
+    local Entities = workspace.World.Entities
+    
+    local WeaponLibrary = require(ReplicatedStorage.Files.Modules.Libraries.WeaponLibrary)
+    local DefaultData = WeaponLibrary.DefaultData
+
+    local function ConnectEntity(entity)
+        if entity == Character or Connections[entity] then return end
+
+        local humanoid = entity:WaitForChild("Humanoid", 5)
+        local animator = humanoid and humanoid:WaitForChild("Animator", 5)
+        local rootPart = entity:WaitForChild("HumanoidRootPart", 5)
+        
+        if not humanoid or not animator or not rootPart then return end
+
+        local connection = animator.AnimationPlayed:Connect(function(track)
+            if not Combat.ParryEnabled then return end
+            
+            if humanoid.Health <= 0 then return end
+            local distance = (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude
+
+            if distance > 25 then return end
+
+            local Info = entity:FindFirstChild("Info")
+            local WeaponType = Info and Info:FindFirstChild("WeaponType")
+            
+            if not WeaponType then return end
+            
+            local WeaponInfo = DefaultData[WeaponType.Value]
+            if not WeaponInfo then return end
+
+
+            local id = tonumber(track.Animation.AnimationId:match("%d+"))
+            local name = GetInfo(id)
+
+            if name:match(WeaponType.Value) and (name:match("Swing") or name:match("M1") or name:match("Slash")) then
+                local baseDelay = WeaponInfo.PauseFrame
+                local speedMult = WeaponInfo.AnimSpeed or 1
+                local finalDelay = baseDelay
+
+                --local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+                --finalDelay = math.max(0, finalDelay - (ping / 2))
+
+                task.delay(finalDelay, function()
+                    if (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude <= 25 then
+                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+                        task.wait()
+                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+                    end
+                end)
+            end
+        end)
+
+        Connections[entity] = connection
+        humanoid.Died:Connect(function()
+            if Connections[entity] then
+                Connections[entity]:Disconnect()
+                Connections[entity] = nil
+            end
+        end)
+    end
+
+    if Enabled then
+        for _, entity in Entities:GetChildren() do
+            task.spawn(ConnectEntity, entity)
+        end
+        
+        Connections["ChildAdded"] = Entities.ChildAdded:Connect(ConnectEntity)
+    else
+        for _, conn in Connections do
+            conn:Disconnect()
+        end
+        table.clear(Connections)
     end
 end
 
-Players.PlayerAdded:Connect(function(Player)
-    if Player ~= lPlayer then
-        SetupPlayer(Player)
-    end
-end)
+function  GetInfo(id)
+    local info = MarketplaceService:GetProductInfoAsync(id)
+    return info.Name
+end
+
 
 return Combat

@@ -10,6 +10,7 @@ local RaidData = {
 }
 
 local lplayer = Players.LocalPlayer
+
 local AutoRaids = {}
 AutoRaids.AutoRaidsEnabled = false
 
