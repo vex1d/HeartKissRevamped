@@ -65,6 +65,10 @@ function Combat.GetSkills()
                 if not table.find(Combat.FireArmSkills, skillName) then
                     table.insert(Combat.FireArmSkills, skillName)
                 end
+
+                if not table.find(Combat.MiscSkills, skillName) then
+                    table.insert(Combat.MiscSkills, skillName)
+                end
             end
 
             if typeof(requiredWeapon) == "table" then

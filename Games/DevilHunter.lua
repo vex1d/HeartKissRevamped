@@ -104,15 +104,15 @@ if WeaponType then
 end
 local activeSkills = CombatModule.GetCurrentSkillList()
 
-local Slot1Dropdown = CombatSection:Dropdown("Skill Slot 1", KatanaSkills, function(selected)
+local Slot1Dropdown = CombatSection:Dropdown("Skill Slot 1", MiscSkills, function(selected)
     SelectedSkills.Slot1 = selected
 end)
 
-local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", KatanaSkills, function(selected)
+local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", MiscSkills, function(selected)
     SelectedSkills.Slot2 = selected
 end)
 
-local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 3", KatanaSkills, function(selected)
+local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 3", MiscSkills, function(selected)
     SelectedSkills.Slot3 = selected
 end)
 
