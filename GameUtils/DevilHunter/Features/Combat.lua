@@ -210,6 +210,7 @@ end
 local Connections = {}
 local AnimationCache = {} 
 local AttackPatterns = {
+    "Aerial",
     "AerialAttack",
     "Attack",
     "Swing", 
