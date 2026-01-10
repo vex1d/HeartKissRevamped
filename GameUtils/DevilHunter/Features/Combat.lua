@@ -239,6 +239,7 @@ function Combat.AutoParry(Enabled: boolean)
     local Character = lPlayer.Character
     local Entities = workspace.World.Entities
     
+    local Skills = ReplicatedStorage.Files.Modules.Shared.Encyclopedia.Skills
     local WeaponLibrary = require(ReplicatedStorage.Files.Modules.Libraries.WeaponLibrary)
     local DefaultData = WeaponLibrary.DefaultData
 
@@ -296,6 +297,8 @@ function Combat.AutoParry(Enabled: boolean)
                             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
                         end
                     end)
+                else
+                    warn("Blocked Attack: " .. name)
                 end
             end
         end)
