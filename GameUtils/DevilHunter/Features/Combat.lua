@@ -227,6 +227,10 @@ local AttackPatterns = {
     "K%d", 
     "F%d",
     "Angel%d",
+    "AngelSword",
+    "YearAngel",
+    "Dagger",
+    "Uppercut",
 }
 
 function Combat.AutoParry(Enabled: boolean)
