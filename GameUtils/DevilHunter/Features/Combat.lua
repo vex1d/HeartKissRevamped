@@ -240,6 +240,8 @@ local function Flatten(tbl)
     end
 end
 
+Flatten(Timings)
+
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
 
@@ -286,6 +288,8 @@ function Combat.AutoParry(Enabled: boolean)
                     task.wait()
                     VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
                 end)
+            else
+
             end
         end)
 
