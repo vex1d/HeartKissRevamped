@@ -10,6 +10,7 @@ local Combat = {}
 local Timings = require("GameUtils/DevilHunter/Timings/Timings")
 
 Combat.ParryDistance = 10
+Combat.FlingPower = 100
 Combat.ParryEnabled = false
 
 Combat.KatanaSkills = {}
@@ -222,6 +223,33 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
         if OldVerify then
             SkillLib.VerifySkill = OldVerify
             print("Skill Requirements Bypassed: Disabled")
+        end
+    end
+end
+
+local flingCon = nil
+function Combat.AntiFling(Enabled: boolean)
+    local Character = lPlayer.Character
+    local rootPart = Character:WaitForChild("HumanoidRootPart")
+    local humanoid = Character:WaitForChild("Humanoid")
+
+    if Enabled then
+        flingCon = RunService.RenderStepped:Connect(function()
+            if humanoid.Health <= 4 then
+                if not rootPart:FindFirstChild("AntiFling") then
+                    local bv = Instance.new("BodyVelocity")
+                    bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                    bv.Velocity = Vector3.new(math.random(-Combat.FlingPower, Combat.FlingPower),  Combat.FlingPower,math.random(-Combat.FlingPower, Combat.FlingPower)) * Combat.FlingPower
+                    task.delay(1, function()
+                        bv:Destroy()
+                    end)
+                end
+            end        
+        end) 
+    else
+        if flingCon then
+            flingCon:Disconnect()
+            flingCon = nil
         end
     end
 end

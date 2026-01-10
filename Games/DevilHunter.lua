@@ -97,6 +97,14 @@ CombatSection:Toggle("Bypass Skill Requirements (buggy)", function(state)
     CombatModule.BypassSkillRequirements(state)
 end)
 
+CombatSection:Toggle("Anti Grip Fling", function(state)
+    CombatModule.AntiFling(state)
+end)
+
+CombatSection:Slider("Fling Power", CombatModule.FlingPower, 500, 1, function(value)
+    CombatModule.FlingPower = value
+end)
+
 local WeaponType = CombatModule.GetWeaponType()
 local currentWeaponName = "None"
 if WeaponType then

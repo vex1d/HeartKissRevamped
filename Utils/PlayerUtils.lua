@@ -208,18 +208,15 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
             infoLabel.TextStrokeTransparency = 0
             infoLabel.Parent = bb
 
-            local healthBg = Instance.new("Frame")
-            healthBg.Size = UDim2.new(0.8, 0, 0, 4)
-            healthBg.Position = UDim2.new(0.1, 0, 0.7, 0)
-            healthBg.BackgroundColor3 = Color3.new(0, 0, 0)
-            healthBg.BorderSizePixel = 0
-            healthBg.Parent = bb
+            local healthLabel = Instance.new("TextLabel")
+            healthLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            healthLabel.BackgroundTransparency = 1
+            healthLabel.TextColor3 = Color3.new(1, 1, 1)
+            healthLabel.Font = Enum.Font.Code
+            healthLabel.TextSize = 12
+            healthLabel.TextStrokeTransparency = 0
+            healthLabel.Parent = bb
 
-            local healthFill = Instance.new("Frame")
-            healthFill.Size = UDim2.new(1, 0, 1, 0)
-            healthFill.BackgroundColor3 = Color3.new(0, 1, 0)
-            healthFill.BorderSizePixel = 0
-            healthFill.Parent = healthBg
 
             local conn
             conn = RunService.RenderStepped:Connect(function()
@@ -232,10 +229,9 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
                 local dist = math.floor((root.Position - lPlayer.Character.HumanoidRootPart.Position).Magnitude)
                 infoLabel.Text = string.format("%s\n[%d m]", player.Name, dist)
                 
-                local healthPercent = hum.Health / hum.MaxHealth
-                healthFill.Size = UDim2.new(math.clamp(healthPercent, 0, 1), 0, 1, 0)
-                
-                healthFill.BackgroundColor3 = Color3.new(1, 0, 0):Lerp(Color3.new(0, 1, 0), healthPercent)
+                local health = math.floor(hum.Health)
+                local maxHealth = math.floor(hum.MaxHealth)
+                healthLabel.Text = string.format("%d/%d", health, maxHealth)
             end)
         end
 
