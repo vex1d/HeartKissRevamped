@@ -199,6 +199,36 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
 end
 
 local Connections = {}
+local AnimationCache = {} 
+
+local function GetInfo(id)
+    if AnimationCache[id] then
+        return AnimationCache[id]
+    end
+
+    local success, info = pcall(function()
+        return game:GetService("MarketplaceService"):GetProductInfo(id, Enum.InfoType.Asset)
+    end)
+
+    if success and info then
+        AnimationCache[id] = info.Name
+        return info.Name
+    else
+        return "Unknown"
+    end
+end
+
+local AttackPatterns = {
+    "AerialAttack",
+    "Attack",
+    "Swing", 
+    "Slash", 
+    "M%d", 
+    "K%d", 
+    "F%d",
+    "Angel%d",
+}
+
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
 
@@ -233,25 +263,36 @@ function Combat.AutoParry(Enabled: boolean)
             local WeaponInfo = DefaultData[WeaponType.Value]
             if not WeaponInfo then return end
 
-
             local id = tonumber(track.Animation.AnimationId:match("%d+"))
             local name = GetInfo(id)
 
-            if name:match(WeaponType.Value) and (name:match("Swing") or name:match("M1") or name:match("Slash")) then
-                local baseDelay = WeaponInfo.PauseFrame
-                local speedMult = WeaponInfo.AnimSpeed or 1
-                local finalDelay = baseDelay
-
-                --local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
-                --finalDelay = math.max(0, finalDelay - (ping / 2))
-
-                task.delay(finalDelay, function()
-                    if (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude <= 25 then
-                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
-                        task.wait()
-                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+            if name:match(WeaponType.Value) then
+                local shouldParry = false
+                for _, pattern in AttackPatterns do
+                    if name:match(pattern) then
+                        shouldParry = true
+                        break
                     end
-                end)
+                end
+
+                if shouldParry then
+                    local baseDelay = WeaponInfo.PauseFrame
+                    local speedMult = WeaponInfo.AnimSpeed or 1
+                    local finalDelay = baseDelay
+    
+                    --local ping = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue() / 1000
+                    --finalDelay = math.max(0, finalDelay - (ping / 2))
+    
+                    print("Parrying: ", name, "Delay: ", finalDelay)
+
+                    task.delay(finalDelay, function()
+                        if (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude <= 25 then
+                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+                            task.wait()
+                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
+                        end
+                    end)
+                end
             end
         end)
 
@@ -276,11 +317,6 @@ function Combat.AutoParry(Enabled: boolean)
         end
         table.clear(Connections)
     end
-end
-
-function  GetInfo(id)
-    local info = MarketplaceService:GetProductInfoAsync(id)
-    return info.Name
 end
 
 
