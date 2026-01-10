@@ -209,6 +209,20 @@ end
 
 local Connections = {}
 local AnimationCache = {} 
+local AttackPatterns = {
+    "AerialAttack",
+    "Attack",
+    "Swing", 
+    "Slash", 
+    "M%d", 
+    "K%d", 
+    "F%d",
+    "Angel%d",
+    "AngelSword",
+    "YearAngel",
+    "Dagger",
+    "Uppercut",
+}
 
 local function GetInfo(id)
     if AnimationCache[id] then
@@ -227,20 +241,6 @@ local function GetInfo(id)
     end
 end
 
-local AttackPatterns = {
-    "AerialAttack",
-    "Attack",
-    "Swing", 
-    "Slash", 
-    "M%d", 
-    "K%d", 
-    "F%d",
-    "Angel%d",
-    "AngelSword",
-    "YearAngel",
-    "Dagger",
-    "Uppercut",
-}
 
 function Combat.AutoParry(Enabled: boolean)
     Combat.ParryEnabled = Enabled
@@ -300,11 +300,9 @@ function Combat.AutoParry(Enabled: boolean)
                     print("Parrying: ", name, "Delay: ", finalDelay)
 
                     task.delay(finalDelay, function()
-                        if (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude <= 25 then
-                            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
-                            task.wait()
-                            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
-                        end
+                        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+                        task.wait()
+                        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
                     end)
                 else
                     warn("Blocked Attack: " .. name)
