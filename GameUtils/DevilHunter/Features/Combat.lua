@@ -252,7 +252,6 @@ function Combat.AutoParry(Enabled: boolean)
     local WeaponLibrary = require(ReplicatedStorage.Files.Modules.Libraries.WeaponLibrary)
     local DefaultData = WeaponLibrary.DefaultData
 
-
     local function ConnectEntity(entity)
         if entity == Character or Connections[entity] then return end
 
@@ -268,7 +267,7 @@ function Combat.AutoParry(Enabled: boolean)
             if humanoid.Health <= 0 then return end
             local distance = (rootPart.Position - Character.HumanoidRootPart.Position).Magnitude
 
-            if distance > 25 then return end
+            if distance > Combat.ParryDistance then return end
 
             local Info = entity:FindFirstChild("Info")
             local WeaponType = Info and Info:FindFirstChild("WeaponType")
