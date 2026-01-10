@@ -10,7 +10,7 @@ local Combat = {}
 local Timings = require("GameUtils/DevilHunter/Timings/Timings")
 
 Combat.ParryDistance = 10
-Combat.FlingPower = 100
+Combat.FlingPower = 0
 Combat.ParryEnabled = false
 
 Combat.KatanaSkills = {}
@@ -238,7 +238,9 @@ function Combat.AntiFling(Enabled: boolean)
             if humanoid.Health <= 4 then
                 if not rootPart:FindFirstChild("AntiFling") then
                     local bv = Instance.new("BodyVelocity")
+                    bv.Name = "AntiFling"
                     bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                    bv.Parent = rootPart
                     bv.Velocity = Vector3.new(math.random(-Combat.FlingPower, Combat.FlingPower),  Combat.FlingPower,math.random(-Combat.FlingPower, Combat.FlingPower)) * Combat.FlingPower
                     task.delay(1, function()
                         bv:Destroy()

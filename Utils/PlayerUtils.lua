@@ -191,32 +191,37 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
             local hum = character:WaitForChild("Humanoid", 10)
             if not root or not hum then return end
 
+            -- 1. Setup Billboard
             local bb = Instance.new("BillboardGui")
             bb.Name = player.Name
             bb.Adornee = root
-            bb.Size = UDim2.new(0, 100, 0, 50)
-            bb.StudsOffset = Vector3.new(0, 3, 0)
+            bb.Size = UDim2.new(0, 150, 0, 80)
+            bb.StudsOffset = Vector3.new(0, 4, 0)
             bb.AlwaysOnTop = true
             bb.Parent = ESP_Folder
 
-            local infoLabel = Instance.new("TextLabel")
-            infoLabel.Size = UDim2.new(1, 0, 0.5, 0)
-            infoLabel.BackgroundTransparency = 1
-            infoLabel.TextColor3 = Color3.new(1, 1, 1)
-            infoLabel.Font = Enum.Font.Code
-            infoLabel.TextSize = 12
-            infoLabel.TextStrokeTransparency = 0
-            infoLabel.Parent = bb
+            local list = Instance.new("UIListLayout")
+            list.Parent = bb
+            list.SortOrder = Enum.SortOrder.LayoutOrder
+            list.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            list.Padding = UDim.new(0, 0)
 
-            local healthLabel = Instance.new("TextLabel")
-            healthLabel.Size = UDim2.new(1, 0, 0.5, 0)
-            healthLabel.BackgroundTransparency = 1
-            healthLabel.TextColor3 = Color3.new(1, 1, 1)
-            healthLabel.Font = Enum.Font.Code
-            healthLabel.TextSize = 12
-            healthLabel.TextStrokeTransparency = 0
-            healthLabel.Parent = bb
+            local function createLabel(order, size, color)
+                local lab = Instance.new("TextLabel")
+                lab.Size = UDim2.new(1, 0, 0.3, 0)
+                lab.BackgroundTransparency = 1
+                lab.TextColor3 = color
+                lab.Font = Enum.Font.GothamBold
+                lab.TextSize = size
+                lab.TextStrokeTransparency = 0
+                lab.LayoutOrder = order
+                lab.Parent = bb
+                return lab
+            end
 
+            local nameLabel = createLabel(1, 14, Color3.new(1, 1, 1))
+            local healthLabel = createLabel(2, 22, Color3.fromRGB(0, 255, 127)) 
+            local distLabel = createLabel(3, 13, Color3.fromRGB(200, 200, 200))
 
             local conn
             conn = RunService.RenderStepped:Connect(function()
@@ -226,12 +231,14 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
                     return
                 end
 
-                local dist = math.floor((root.Position - lPlayer.Character.HumanoidRootPart.Position).Magnitude)
-                infoLabel.Text = string.format("%s\n[%d m]", player.Name, dist)
-                
+                nameLabel.Text = player.Name
+
                 local health = math.floor(hum.Health)
                 local maxHealth = math.floor(hum.MaxHealth)
-                healthLabel.Text = string.format("%d/%d", health, maxHealth)
+                healthLabel.Text = string.format("%d / %d", health, maxHealth)
+
+                local dist = math.floor((root.Position - lPlayer.Character.HumanoidRootPart.Position).Magnitude)
+                distLabel.Text = string.format("[%d m]", dist)
             end)
         end
 
