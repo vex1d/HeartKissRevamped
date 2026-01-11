@@ -43,18 +43,6 @@ function PlayerUtils:Float(active: boolean)
     end
 end
 
-function PlayerUtils:SetNoclip(Enabled: boolean, Speed: number)
-    local char = lPlayer.Character
-    if not char then return end
-    
-    for _, v in char:GetChildren() do
-        if v:IsA("BasePart") then
-            v.CanCollide = Enabled
-        end 
-    end
-    PlayerUtils.Fly(Enabled, Speed)
-end
-
 function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
     if not TargetPart then return false end
 
@@ -70,6 +58,18 @@ function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
     return false
 end
 
+function PlayerUtils:SetNoclip(Enabled: boolean, Speed: number)
+    local char = lPlayer.Character
+    if not char then return end
+    
+    for _, v in char:GetChildren() do
+        if v:IsA("BasePart") then
+            v.CanCollide = Enabled
+        end 
+    end
+
+    PlayerUtils.Fly(Enabled, Speed)
+end
 
 function PlayerUtils.Fly(Enabled: boolean, Speed: number)
     FlyState.Active = Enabled
