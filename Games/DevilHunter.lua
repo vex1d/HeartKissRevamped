@@ -57,7 +57,7 @@ PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(sta
             WalkSpeedCon:Disconnect()
             WalkSpeedCon = nil
         end
-        
+
         humanoid.WalkSpeed = 16
     end
 end)
@@ -239,7 +239,7 @@ end)
 local NpcNames = {}
 for _, entity in workspace.World.Dialog:GetChildren() do
     if entity:IsA("Model") then
-        if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "" then
+        if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "TemptationModel" then
             continue
         end
         
@@ -263,7 +263,7 @@ MiscSection:Button("Tp to Npc", function()
 end)
 
 MiscSection:Button("Open Blackmarket", function(state)
-    lPlayer.PlayerGui.Blackmarket.Enabled = state
+    lPlayer.PlayerGui.Blackmarket.Enabled = not lPlayer.PlayerGui.Blackmarket.Enabled
 end)
 
 
