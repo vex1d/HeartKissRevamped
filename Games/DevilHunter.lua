@@ -52,17 +52,20 @@ local WalkSpeedValue = 16
 PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
     WalkSpeedEnabled = state
     
+    local Character = lPlayer.Character
+    local humanoid = Character and Character:FindFirstChild("Humanoid")
+
     if WalkSpeedEnabled then
         WalkSpeedCon = RunService.RenderStepped:Connect(function()
-            if lPlayer.Character and lPlayer.Character:FindFirstChild("Humanoid") then
-                lPlayer.Character.Humanoid.WalkSpeed = WalkSpeedValue 
-            end
+            humanoid.WalkSpeed = WalkSpeedValue
         end)
     else
         if WalkSpeedCon then
             WalkSpeedCon:Disconnect()
             WalkSpeedCon = nil
         end
+
+        humanoid.WalkSpeed = 16
     end
 end)
 
