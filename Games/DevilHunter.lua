@@ -170,7 +170,7 @@ end)
 --------------AutoFarm Tab ----------------
 
 local SelectedMission = nil
-AutofarmMissions:Dropdown("Mission", {"Cleanup Duty", "Hold the Line", "Aftermath Detail"}, function(selected: string)
+AutofarmMissions:Dropdown("Mission", {"Cleanup Duty"}, function(selected: string)
     SelectedMission = selected
 end)
 
