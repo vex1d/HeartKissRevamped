@@ -58,17 +58,34 @@ function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
     return false
 end
 
-function PlayerUtils:SetNoclip(Enabled: boolean, Speed: number)
-    local char = lPlayer.Character
-    if not char then return end
-    
-    for _, v in char:GetChildren() do
-        if v:IsA("BasePart") then
-            v.CanCollide = Enabled
-        end 
+local NoclipConnection = nil
+function PlayerUtils.SetNoclip(Enabled, Speed)
+    PlayerUtils.Fly(Enabled, Speed)
+
+    if NoclipConnection then
+        NoclipConnection:Disconnect()
+        NoclipConnection = nil
     end
 
-    PlayerUtils.Fly(Enabled, Speed)
+    local char = lPlayer.Character
+    if not char then return end
+
+    if Enabled then
+        NoclipConnection = RunService.Stepped:Connect(function()
+            if not lPlayer.Character then return end
+            for _, v in lPlayer.Character:GetChildren() do
+                if v:IsA("BasePart") and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end)
+    else
+        for _, v in char:GetChildren() do
+            if v:IsA("BasePart") then
+                v.CanCollide = true
+            end
+        end
+    end
 end
 
 function PlayerUtils.Fly(Enabled: boolean, Speed: number)
