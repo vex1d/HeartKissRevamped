@@ -46,8 +46,13 @@ local CombatSection = MainTab:Section("Combat")
 local PlayerSection = MainTab:Section("Player")
 
 local WalkSpeedEnabled = false
-PlayerSection:ToggleInput("Walk Speed", false, Enum.KeyCode.Unknown, function(state)
+PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
     WalkSpeedEnabled = state
+
+    if not WalkSpeedEnabled then
+        local humanoid = lPlayer.Character:WaitForChild("Humanoid")
+        humanoid.WalkSpeed = 16
+    end
 end)
 
 local WalkSpeedCon
