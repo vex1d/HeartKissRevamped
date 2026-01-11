@@ -50,14 +50,21 @@ PlayerSection:ToggleInput("Toggle Walk Speed", false, Enum.KeyCode.Unknown, func
     WalkSpeedEnabled = state
 end)
 
+local WalkSpeedCon
 PlayerSection:Slider("Speed", 16, 150, 16, function(value)
-    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
     if not WalkSpeedEnabled then
-        humanoid.WalkSpeed = 16
+        if WalkSpeedCon then
+            WalkSpeedCon:Disconnect()
+            WalkSpeedCon = nil
+        end
         return
     end
 
-    humanoid.WalkSpeed = value
+    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
+
+    WalkSpeedCon = RunService.RenderStepped:Connect(function()
+        humanoid.WalkSpeed = value
+    end)
 end)
 
 local FlyEnabled = false
