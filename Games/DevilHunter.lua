@@ -46,7 +46,7 @@ local CombatSection = MainTab:Section("Combat")
 local PlayerSection = MainTab:Section("Player")
 
 local WalkSpeedEnabled = false
-PlayerSection:ToggleInput("Toggle Walk Speed", false, Enum.KeyCode.Unknown, function(state)
+PlayerSection:ToggleInput("Walk Speed", false, Enum.KeyCode.Unknown, function(state)
     WalkSpeedEnabled = state
 end)
 
@@ -71,7 +71,7 @@ end)
 local FlyEnabled = false
 local FlySpeed = 16
 
-PlayerSection:ToggleInput("Toggle Fly", false, Enum.KeyCode.Unknown, function(state)
+PlayerSection:ToggleInput("Fly", false, Enum.KeyCode.Unknown, function(state)
     FlyEnabled = state
     PlayerUtils.Fly(state, FlySpeed)
 end)
@@ -85,7 +85,7 @@ PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
 end)
 
 local NoclipSpeed = 16
-PlayerSection:ToggleInput("Toggle NoClip", false, Enum.KeyCode.Unknown, function(state)
+PlayerSection:ToggleInput("NoClip", false, Enum.KeyCode.Unknown, function(state)
     FlyEnabled = state
     PlayerUtils.SetNoclip(state, NoclipSpeed)
 end)
