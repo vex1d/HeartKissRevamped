@@ -220,8 +220,8 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
             end
 
             local nameLabel = createLabel(1, 14, Color3.new(1, 1, 1))
-            local healthLabel = createLabel(2, 22, Color3.fromRGB(0, 255, 127)) 
-            local distLabel = createLabel(3, 13, Color3.fromRGB(200, 200, 200))
+            local healthLabel = createLabel(2, 13, Color3.fromRGB(200, 200, 200)) 
+            local distLabel = createLabel(3, 12, Color3.fromRGB(200, 200, 200))
 
             local conn
             conn = RunService.RenderStepped:Connect(function()
@@ -243,7 +243,9 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
         end
 
         player.CharacterAdded:Connect(Setup)
-        if player.Character then task.spawn(Setup, player.Character) end
+        if player.Character then
+            task.spawn(Setup, player.Character)
+        end
     end
 
     for _, player in Players:GetPlayers() do CreateESP(player) end

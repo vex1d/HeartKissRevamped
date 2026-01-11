@@ -200,6 +200,21 @@ MiscSection:Toggle("Toggle ESP", function(state)
     PlayerUtils.ToggleESP(state)
 end)
 
+MiscSection:Toggle("Open BlackMarket", function(state)
+    lPlayer.PlayerGui.BlackMarket.Enabled = state
+end)
+
+for _, entity in workspace.World.Dialog:GetChildren() do
+    if entity:IsA("Model") then
+        if entity.Name == "VaultDoor" or entity.Name == "Surgety Kit" or entity.Name == "" then
+            continue
+        end
+    end
+end
+
+local Npcs = {}
+
+
 -------------------SETTINGS TAB-------------------
 local SettingsSection = SettingsTab:Section("Settings")
 SettingsSection:Toggle("No Blur", function(state)

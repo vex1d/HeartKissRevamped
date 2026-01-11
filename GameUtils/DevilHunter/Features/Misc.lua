@@ -16,14 +16,9 @@ function  Misc.Testing()
     local Character = LocalPlayer.Character
     local Listeners = nil
 
-    MovementHandler.Dash(_, Framework, "Forward")
+    -- MovementHandler.Dash(_, Framework, "Forward")
 
-    local oldCanAction 
-    oldCanAction = hookfunction(TagHandler.CanAction, function(Character)
-        return true
-    end)
-
-
+    print(Framework:GetModule("AI"))
 end
 
 
