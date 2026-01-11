@@ -52,19 +52,20 @@ end)
 
 local WalkSpeedCon
 PlayerSection:Slider("Speed", 16, 150, 16, function(value)
-    if not WalkSpeedEnabled then
+    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
+
+    if WalkSpeedEnabled then
+        WalkSpeedCon = RunService.RenderStepped:Connect(function()
+            humanoid.WalkSpeed = value
+        end)
+    else
         if WalkSpeedCon then
             WalkSpeedCon:Disconnect()
             WalkSpeedCon = nil
         end
-        return
+
+        humanoid.WalkSpeed = 16
     end
-
-    local humanoid = lPlayer.Character:WaitForChild("Humanoid")
-
-    WalkSpeedCon = RunService.RenderStepped:Connect(function()
-        humanoid.WalkSpeed = value
-    end)
 end)
 
 local FlyEnabled = false
