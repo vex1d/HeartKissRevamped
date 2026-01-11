@@ -224,7 +224,8 @@ end)
 
 -------------------MISC TAB-------------------
 local MiscSection = MiscTab:Section("Misc")
-MiscSection:Toggle("Toggle ESP", function(state)
+local ESPSection = MiscTab:Section("ESP")
+ESPSection:Toggle("Toggle ESP", function(state)
     PlayerUtils.ToggleESP(state)
 end)
 
@@ -258,7 +259,6 @@ end)
 MiscSection:Button("Open Blackmarket", function(state)
     lPlayer.PlayerGui.Blackmarket.Enabled = state
 end)
-
 
 
 -------------------SETTINGS TAB-------------------
