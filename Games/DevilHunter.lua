@@ -46,7 +46,7 @@ local CombatSection = MainTab:Section("Combat")
 local PlayerSection = MainTab:Section("Player")
 
 local WalkSpeedEnabled = false
-local WalkSpeedCon
+local WalkSpeedCon = nil
 PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
     WalkSpeedEnabled = state
     
