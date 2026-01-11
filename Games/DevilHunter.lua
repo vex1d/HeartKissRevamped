@@ -84,6 +84,21 @@ PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
     end
 end)
 
+local NoclipSpeed = 16
+PlayerSection:ToggleInput("Toggle NoClip", false, Enum.KeyCode.Unknown, function(state)
+    FlyEnabled = state
+    PlayerUtils.SetNoclip(state)
+    PlayerUtils.Fly(state, NoclipSpeed)
+end)
+
+PlayerSection:Slider("No Clip Speed", 16, 350, 16, function(value)
+    FlySpeed = value
+    
+    if FlyEnabled then
+        PlayerUtils.Fly(true, FlySpeed)
+    end
+end)
+
 --------------------------Combat Tab--------------------------
 CombatSection:Toggle("Auto Parry", function(state)
     CombatModule.AutoParry(state)

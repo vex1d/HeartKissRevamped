@@ -43,15 +43,16 @@ function PlayerUtils:Float(active: boolean)
     end
 end
 
-function PlayerUtils:SetNoclip(active: boolean)
+function PlayerUtils:SetNoclip(Enabled: boolean)
     local char = lPlayer.Character
     if not char then return end
     
     for _, v in char:GetChildren() do
         if v:IsA("BasePart") then
-            v.CanCollide = not active
+            v.CanCollide = Enabled
         end 
     end
+    PlayerUtils.Fly(Enabled, )
 end
 
 function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
