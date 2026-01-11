@@ -235,7 +235,7 @@ function PlayerUtils.ToggleESP(Enabled: boolean)
 
                 local health = math.floor(hum.Health)
                 local maxHealth = math.floor(hum.MaxHealth)
-                healthLabel.Text = string.format("%d / %d", health, maxHealth)
+                healthLabel.Text = string.format("[:%d / %d]", health, maxHealth)
 
                 local dist = math.floor((root.Position - lPlayer.Character.HumanoidRootPart.Position).Magnitude)
                 distLabel.Text = string.format("[%d m]", dist)

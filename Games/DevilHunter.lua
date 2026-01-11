@@ -200,8 +200,8 @@ MiscSection:Toggle("Toggle ESP", function(state)
     PlayerUtils.ToggleESP(state)
 end)
 
-MiscSection:Toggle("Open BlackMarket", function(state)
-    lPlayer.PlayerGui.BlackMarket.Enabled = state
+MiscSection:Button("Open BlackMarket", function(state)
+    lPlayer.PlayerGui.Blackmarket.Enabled = state
 end)
 
 local Npcs = {}
@@ -225,7 +225,6 @@ MiscSection:Button("Tp to Npc", function()
 end)
 
 
-
 -------------------SETTINGS TAB-------------------
 local SettingsSection = SettingsTab:Section("Settings")
 SettingsSection:Toggle("No Blur", function(state)
@@ -234,7 +233,6 @@ SettingsSection:Toggle("No Blur", function(state)
             if v.Name == "InventoryBlur" then
                 continue
             end
-
 
             v.Enabled = not state
         end
