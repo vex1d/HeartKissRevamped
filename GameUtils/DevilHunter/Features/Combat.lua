@@ -234,10 +234,10 @@ function Combat.AntiFling(Enabled: boolean)
     local humanoid = Character:WaitForChild("Humanoid")
 
     local BaseFlingPower = 100
-    local FlingPower = (BaseFlingPower + Combat.FlingPower) * 5
-
+    
     if Enabled then
         flingCon = RunService.RenderStepped:Connect(function()
+            local FlingPower = (BaseFlingPower + Combat.FlingPower) * 5
             if humanoid.Health <= 4 then
                 if not rootPart:FindFirstChild("AntiFling") then
                     local bv = Instance.new("BodyVelocity")
