@@ -180,6 +180,8 @@ function Library.new(Name: string, Size: UDim2, KeyBind: Enum.UserInputType | En
     return self
 end
 
+-----------------TABS
+
 function  Library:Tab(text: string)
     local ScrollingFrame = self.Frames.Tabs.ScrollingFrame
    

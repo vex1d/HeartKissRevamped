@@ -62,11 +62,6 @@ local NoclipConnection = nil
 function PlayerUtils.SetNoclip(Enabled, Speed)
     PlayerUtils.Fly(Enabled, Speed)
 
-    if NoclipConnection then
-        NoclipConnection:Disconnect()
-        NoclipConnection = nil
-    end
-
     local char = lPlayer.Character
     if not char then return end
 
@@ -80,6 +75,11 @@ function PlayerUtils.SetNoclip(Enabled, Speed)
             end
         end)
     else
+        if NoclipConnection then
+            NoclipConnection:Disconnect()
+            NoclipConnection = nil
+        end
+
         for _, v in char:GetChildren() do
             if v:IsA("BasePart") then
                 v.CanCollide = true
