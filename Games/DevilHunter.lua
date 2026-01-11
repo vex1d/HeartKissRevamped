@@ -46,7 +46,7 @@ local CombatSection = MainTab:Section("Combat")
 local PlayerSection = MainTab:Section("Player")
 
 local WalkSpeedEnabled = false
-PlayerSection:Toggle("Toggle Walk Speed", function(state)
+PlayerSection:ToggleInput("Toggle Walk Speed", false, Enum.KeyCode.Unknown, function(state)
     WalkSpeedEnabled = state
 end)
 
@@ -63,7 +63,7 @@ end)
 local FlyEnabled = false
 local FlySpeed = 16
 
-PlayerSection:ToggleBind("Toggle Fly", Enum.KeyCode.T, function(state)
+PlayerSection:ToggleInput("Toggle Fly", false, Enum.KeyCode.Unknown, function(state)
     FlyEnabled = state
     PlayerUtils.Fly(state, FlySpeed)
 end)
@@ -200,7 +200,7 @@ MiscSection:Toggle("Toggle ESP", function(state)
     PlayerUtils.ToggleESP(state)
 end)
 
-MiscSection:Button("Open BlackMarket", function(state)
+MiscSection:Button("Open Blackmarket", function(state)
     lPlayer.PlayerGui.Blackmarket.Enabled = state
 end)
 

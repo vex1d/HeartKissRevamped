@@ -977,6 +977,103 @@ function  Library:Tab(text: string)
             table.insert(connections, con)
         end
 
+	    function SectionFunctions:ToggleInput(text, defaultState, defaultKey, callback)
+			ElementCount = ElementCount + 1
+			callback = callback or function() end
+			defaultState = defaultState or false
+			defaultKey = defaultKey or Enum.KeyCode.Unknown
+
+			local enabled = defaultState
+			local CurrentKey = defaultKey
+			local isBinding = false
+
+			local MainFrame = Instance.new("Frame")
+			MainFrame.Size = UDim2.new(1, 0, 0, 20)
+			MainFrame.BackgroundTransparency = 1
+			MainFrame.LayoutOrder = ElementCount
+			MainFrame.Parent = Container
+
+			local ToggleBtn = Instance.new("TextButton")
+			ToggleBtn.Size = UDim2.new(1, -70, 1, 0) 
+			ToggleBtn.BackgroundTransparency = 1
+			ToggleBtn.Text = ""
+			ToggleBtn.Parent = MainFrame
+
+			local CheckMark = Instance.new("Frame")
+			CheckMark.Size = UDim2.new(0, 12, 0, 12)
+			CheckMark.Position = UDim2.new(0, 0, 0.5, -6)
+			CheckMark.BackgroundColor3 = enabled and THEMES.LineColor or THEMES.FrameColor
+			CheckMark.BorderColor3 = THEMES.BorderColor
+			CheckMark.Parent = ToggleBtn
+			CreateGradient(CheckMark)
+
+			local Label = Instance.new("TextLabel")
+			Label.Size = UDim2.new(1, -20, 1, 0)
+			Label.Position = UDim2.new(0, 18, 0, 0)
+			Label.BackgroundTransparency = 1
+			Label.Text = text
+			Label.TextColor3 = THEMES.TextColor
+			Label.TextXAlignment = Enum.TextXAlignment.Left
+			Label.Font = Enum.Font.Code
+			Label.TextSize = 12
+			Label.Parent = ToggleBtn
+
+			local BindBtn = Instance.new("TextButton")
+			BindBtn.Size = UDim2.new(0, 60, 1, 0)
+			BindBtn.Position = UDim2.new(1, -60, 0, 0)
+			BindBtn.BackgroundColor3 = THEMES.FrameColor
+			BindBtn.BorderColor3 = THEMES.BorderColor
+			BindBtn.Text = (CurrentKey.Name == "None") and "[None]" or "[" .. CurrentKey.Name .. "]"
+			BindBtn.TextColor3 = THEMES.TextColor
+			BindBtn.Font = Enum.Font.Code
+			BindBtn.TextSize = 12
+			BindBtn.Parent = MainFrame
+			CreateGradient(BindBtn)
+
+			local function UpdateToggle()
+				enabled = not enabled
+				callback(enabled)
+
+				if enabled then
+					TweenService:Create(CheckMark, TweenInfo.new(0.2), {BackgroundColor3 = THEMES.LineColor}):Play()
+				else
+					TweenService:Create(CheckMark, TweenInfo.new(0.2), {BackgroundColor3 = THEMES.FrameColor}):Play()
+				end
+			end
+
+			ToggleBtn.MouseButton1Click:Connect(UpdateToggle)
+
+			BindBtn.MouseButton1Click:Connect(function()
+				isBinding = true
+				BindBtn.Text = "[...]"
+				BindBtn.BorderColor3 = THEMES.LineColor
+			end)
+
+			local InputConnection
+			InputConnection = UserInputService.InputBegan:Connect(function(input, processed)
+				if isBinding then
+					if input.UserInputType == Enum.UserInputType.Keyboard then
+						isBinding = false
+						BindBtn.BorderColor3 = THEMES.BorderColor
+
+						if input.KeyCode == Enum.KeyCode.Backspace then
+							CurrentKey = Enum.KeyCode.Unknown
+							BindBtn.Text = "[None]"
+						else
+							CurrentKey = input.KeyCode
+							BindBtn.Text = "[" .. input.KeyCode.Name .. "]"
+						end
+					end
+				elseif not processed and input.KeyCode == CurrentKey and CurrentKey ~= Enum.KeyCode.Unknown then
+					UpdateToggle()
+				end
+			end)
+
+			MainFrame.Destroying:Connect(function()
+				if InputConnection then InputConnection:Disconnect() end
+			end)
+		end
+
         return SectionFunctions
     end
 
