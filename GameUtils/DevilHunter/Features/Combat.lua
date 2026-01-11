@@ -237,14 +237,14 @@ function Combat.AntiFling(Enabled: boolean)
     
     if Enabled then
         flingCon = RunService.RenderStepped:Connect(function()
-            local FlingPower = (BaseFlingPower + Combat.FlingPower) * 5
+            local FlingPower = (BaseFlingPower + Combat.FlingPower) * 2
             if humanoid.Health <= 4 then
                 if not rootPart:FindFirstChild("AntiFling") then
                     local bv = Instance.new("BodyVelocity")
                     bv.Name = "AntiFling"
                     bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
                     bv.Parent = rootPart
-                    bv.Velocity = Vector3.new(math.random(-FlingPower, FlingPower),  FlingPower, math.random(-FlingPower, FlingPower)) * 2
+                    bv.Velocity = Vector3.new(math.random(-FlingPower, FlingPower),  FlingPower, math.random(-FlingPower, FlingPower))
                     task.delay(0.2, function()
                         bv:Destroy()
                     end)
