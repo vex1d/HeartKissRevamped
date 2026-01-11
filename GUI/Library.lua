@@ -1058,7 +1058,7 @@ function  Library:Tab(text: string)
 
 						if input.KeyCode == Enum.KeyCode.Backspace then
 							CurrentKey = Enum.KeyCode.Unknown
-							BindBtn.Text = "[None]"
+							BindBtn.Text = "[...]"
 						else
 							CurrentKey = input.KeyCode
 							BindBtn.Text = "[" .. input.KeyCode.Name .. "]"

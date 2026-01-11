@@ -200,9 +200,6 @@ MiscSection:Toggle("Toggle ESP", function(state)
     PlayerUtils.ToggleESP(state)
 end)
 
-MiscSection:Button("Open Blackmarket", function(state)
-    lPlayer.PlayerGui.Blackmarket.Enabled = state
-end)
 
 local Npcs = {}
 for _, entity in workspace.World.Dialog:GetChildren() do
@@ -210,8 +207,8 @@ for _, entity in workspace.World.Dialog:GetChildren() do
         if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "" then
             continue
         end
-
-        Npcs[entity.Name] = entity
+        
+        table.insert(Npcs, entity)
     end
 end
 
@@ -221,8 +218,19 @@ local NpcDropdown = MiscSection:Dropdown("Npcs", Npcs, function(selected)
 end)
 
 MiscSection:Button("Tp to Npc", function()
-    lPlayer.Character:PivotTo(selectedNpc:GetPivot() * CFrame.new(0, 3, 0))
+    local npc = selectedNpc
+    if npc then
+        local npcModel = Npcs[npc]
+        if npcModel then
+            lPlayer.Character:PivotTo(npcModel:GetPivot() * CFrame.new(0, 3, 0))
+        end
+    end
 end)
+
+MiscSection:Button("Open Blackmarket", function(state)
+    lPlayer.PlayerGui.Blackmarket.Enabled = state
+end)
+
 
 
 -------------------SETTINGS TAB-------------------
