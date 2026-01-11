@@ -234,7 +234,7 @@ function Combat.AntiFling(Enabled: boolean)
     local humanoid = Character:WaitForChild("Humanoid")
 
     local BaseFlingPower = 100
-    local FlingPower = BaseFlingPower + Combat.FlingPower * 2
+    local FlingPower = BaseFlingPower + Combat.FlingPower * 8
 
     if Enabled then
         flingCon = RunService.RenderStepped:Connect(function()
