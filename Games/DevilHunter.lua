@@ -204,15 +204,26 @@ MiscSection:Toggle("Open BlackMarket", function(state)
     lPlayer.PlayerGui.BlackMarket.Enabled = state
 end)
 
+local Npcs = {}
 for _, entity in workspace.World.Dialog:GetChildren() do
     if entity:IsA("Model") then
-        if entity.Name == "VaultDoor" or entity.Name == "Surgety Kit" or entity.Name == "" then
+        if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "" then
             continue
         end
+
+        Npcs[entity.Name] = entity
     end
 end
 
-local Npcs = {}
+local selectedNpc = nil
+local NpcDropdown = MiscSection:Dropdown("Npcs", Npcs, function(selected)
+    selectedNpc = selected
+end)
+
+MiscSection:Button("Tp to Npc", function()
+    lPlayer.Character:PivotTo(selectedNpc:GetPivot() * CFrame.new(0, 3, 0))
+end)
+
 
 
 -------------------SETTINGS TAB-------------------
