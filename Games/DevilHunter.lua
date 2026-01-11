@@ -223,26 +223,26 @@ MiscSection:Toggle("Toggle ESP", function(state)
 end)
 
 
-local Npcs = {}
+local NpcNames = {}
 for _, entity in workspace.World.Dialog:GetChildren() do
     if entity:IsA("Model") then
         if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "" then
             continue
         end
         
-        table.insert(Npcs, entity)
+        table.insert(NpcNames, entity.Name)
     end
 end
 
-local selectedNpc = nil
-local NpcDropdown = MiscSection:Dropdown("Npcs", Npcs, function(selected)
-    selectedNpc = selected
+local selectedNpcName = nil
+local NpcDropdown = MiscSection:Dropdown("Npcs", NpcNames, function(selected)
+    selectedNpcName = selected
 end)
 
 MiscSection:Button("Tp to Npc", function()
-    local npc = selectedNpc
-    if npc then
-        local npcModel = Npcs[npc]
+    local Dialog = workspace.World.Dialog
+    if selectedNpcName then
+        local npcModel = Dialog:FindFirstChild(selectedNpcName)
         if npcModel then
             lPlayer.Character:PivotTo(npcModel:GetPivot() * CFrame.new(0, 3, 0))
         end
