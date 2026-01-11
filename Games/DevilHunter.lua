@@ -58,6 +58,7 @@ PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(sta
     if WalkSpeedEnabled then
         WalkSpeedCon = RunService.RenderStepped:Connect(function()
             humanoid.WalkSpeed = WalkSpeedValue
+            print("Running")
         end)
     else
         if WalkSpeedCon then

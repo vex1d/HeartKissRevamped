@@ -17,8 +17,9 @@ function  Misc.Testing()
     local Listeners = nil
 
     -- MovementHandler.Dash(_, Framework, "Forward")
-
-    print(Framework:GetModule("AI"))
+    for i, v in TagHandler do
+        print(i, v)
+    end
 end
 
 

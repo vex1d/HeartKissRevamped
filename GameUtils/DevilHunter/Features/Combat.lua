@@ -241,7 +241,7 @@ function Combat.AntiFling(Enabled: boolean)
                     bv.Name = "AntiFling"
                     bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
                     bv.Parent = rootPart
-                    bv.Velocity = -rootPart.CFrame.LookVector + rootPart.CFrame.UpVector * Combat.FlingPower
+                    bv.Velocity = -rootPart.CFrame.LookVector + rootPart.CFrame.UpVector * (Combat.FlingPower * 2)
                     task.delay(0.2, function()
                         bv:Destroy()
                     end)
