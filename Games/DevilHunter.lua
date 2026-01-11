@@ -91,7 +91,7 @@ end)
  
 local NoclipEnabled = false
 local NoclipSpeed = 16
-PlayerSection:ToggleInput("NoClip", false, Enum.KeyCode.Unknown, function(state)
+PlayerSection:ToggleInput("NoClip Fly", false, Enum.KeyCode.Unknown, function(state)
     NoclipEnabled = state
     PlayerUtils.SetNoclip(state, NoclipSpeed)
 end)
