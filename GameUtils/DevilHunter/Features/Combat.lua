@@ -244,7 +244,7 @@ function Combat.AntiFling(Enabled: boolean)
                     bv.Name = "AntiFling"
                     bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
                     bv.Parent = rootPart
-                    bv.Velocity = Vector3.new(math.random(-Combat.FlingPower, Combat.FlingPower),  FlingPower, math.random(-FlingPower, FlingPower))
+                    bv.Velocity = Vector3.new(math.random(-FlingPower, FlingPower),  FlingPower, math.random(-FlingPower, FlingPower))
                     task.delay(0.2, function()
                         bv:Destroy()
                     end)
