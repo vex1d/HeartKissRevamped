@@ -228,6 +228,7 @@ function Combat.BypassSkillRequirements(Toggle: boolean)
 end
 
 local flingCon = nil
+local LastFling = 0
 function Combat.AntiFling(Enabled: boolean)
     local Character = lPlayer.Character
     local rootPart = Character:WaitForChild("HumanoidRootPart")
@@ -240,14 +241,17 @@ function Combat.AntiFling(Enabled: boolean)
             local FlingPower = (BaseFlingPower + Combat.FlingPower) * 2
             if humanoid.Health <= 4 then
                 if not rootPart:FindFirstChild("AntiFling") then
-                    local bv = Instance.new("BodyVelocity")
-                    bv.Name = "AntiFling"
-                    bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-                    bv.Parent = rootPart
-                    bv.Velocity = Vector3.new(math.random(-FlingPower, FlingPower),  FlingPower, math.random(-FlingPower, FlingPower))
-                    task.delay(0.2, function()
-                        bv:Destroy()
-                    end)
+                    if os.clock() - LastFling > 2 then
+                        local bv = Instance.new("BodyVelocity")
+                        bv.Name = "AntiFling"
+                        bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+                        bv.Parent = rootPart
+                        bv.Velocity = Vector3.new(math.random(-FlingPower, FlingPower),  FlingPower, math.random(-FlingPower, FlingPower))
+                        task.delay(0.2, function()
+                            bv:Destroy()
+                        end)
+                        LastFling = os.clock()
+                    end
                 end
             end        
         end) 
