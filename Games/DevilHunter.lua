@@ -45,33 +45,33 @@ local MainSection = MainTab:Section("Main")
 local CombatSection = MainTab:Section("Combat")
 local PlayerSection = MainTab:Section("Player")
 
--- local WalkSpeedEnabled = false
--- local WalkSpeedCon = nil
--- local WalkSpeedValue = 16
+local WalkSpeedEnabled = false
+local WalkSpeedCon = nil
+local WalkSpeedValue = 16
 
--- -- PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
--- --     WalkSpeedEnabled = state
+PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
+    WalkSpeedEnabled = state
     
--- --     local Character = lPlayer.Character
--- --     local humanoid = Character and Character:FindFirstChild("Humanoid")
+    local Character = lPlayer.Character
+    local humanoid = Character and Character:FindFirstChild("Humanoid")
 
--- --     if WalkSpeedEnabled then
--- --         WalkSpeedCon = RunService.RenderStepped:Connect(function()
--- --             humanoid.WalkSpeed = WalkSpeedValue
--- --         end)
--- --     else
--- --         if WalkSpeedCon then
--- --             WalkSpeedCon:Disconnect()
--- --             WalkSpeedCon = nil
--- --         end
+    if WalkSpeedEnabled then
+        WalkSpeedCon = RunService.RenderStepped:Connect(function()
+            humanoid.WalkSpeed = WalkSpeedValue
+        end)
+    else
+        if WalkSpeedCon then
+            WalkSpeedCon:Disconnect()
+            WalkSpeedCon = nil
+        end
 
--- --         humanoid.WalkSpeed = 16
--- --     end
--- -- end)
+        humanoid.WalkSpeed = 16
+    end
+end)
 
--- PlayerSection:Slider("Speed", 16, 150, 16, function(value)
---     WalkSpeedValue = value
--- end)
+PlayerSection:Slider("Speed", 16, 150, 16, function(value)
+    WalkSpeedValue = value
+end)
 
 local FlyEnabled = false
 local FlySpeed = 16
