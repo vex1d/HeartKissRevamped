@@ -43,7 +43,7 @@ function PlayerUtils:Float(active: boolean)
     end
 end
 
-function PlayerUtils:SetNoclip(Enabled: boolean)
+function PlayerUtils:SetNoclip(Enabled: boolean, Speed: number)
     local char = lPlayer.Character
     if not char then return end
     
@@ -52,7 +52,7 @@ function PlayerUtils:SetNoclip(Enabled: boolean)
             v.CanCollide = Enabled
         end 
     end
-    PlayerUtils.Fly(Enabled, )
+    PlayerUtils.Fly(Enabled, Speed)
 end
 
 function PlayerUtils:CheckForClosePlayers(TargetPart: any, Distance: number)
