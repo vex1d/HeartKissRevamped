@@ -88,7 +88,7 @@ PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
         PlayerUtils.Fly(true, FlySpeed)
     end
 end)
-
+ 
 local NoclipEnabled = false
 local NoclipSpeed = 16
 PlayerSection:ToggleInput("NoClip", false, Enum.KeyCode.Unknown, function(state)
