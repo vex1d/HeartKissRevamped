@@ -21,10 +21,9 @@ local function gitRequire(path)
         return nil
     end
     
-    local func, loadErr = loadstring(response)
+    local func = loadstring(response)
     if not func then
         warn("SYNTAX ERROR in module: " .. tostring(path))
-        warn(loadErr)
         return nil
     end
 
