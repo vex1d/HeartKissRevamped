@@ -15,11 +15,11 @@ local AutoFarmTab = window:Tab("AutoFarm")
 local AutoFarm = AutoFarmTab:Section("AutoFarm")
 local MainSection = MainTab:Section("Main")
 
-AutoFarm:ToggleBind("Auto farm nearest", function(Enabled)
+AutoFarm:ToggleInput("Auto farm nearest", Enum.KeyCode.Three, function(Enabled)
 	Autofarm.Enabled = Enabled
 end)
 
-MainSection:ToggleBind("Tp quest", Enum.KeyCode.Two, function()
+MainSection:ToggleInput("Tp quest", Enum.KeyCode.Two, function()
 	local EffectsFolder = workspace.Effects
 	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
 	local hasInteracted = questbrick:GetAttribute("hasInteracted")
