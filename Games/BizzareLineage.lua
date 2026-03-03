@@ -6,8 +6,6 @@ local Lib = require("GUI/Library")
 local window = Lib.new("HeartKiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
 
 local localPlayer = Players.LocalPlayer
-local Character = localPlayer.Character
-local rootPart = Character:FindFirstChild("HumanoidRootPart")
 
 local MainTab = window:Tab("Main")
 local AutoFarmTab = window:Tab("AutoFarm")

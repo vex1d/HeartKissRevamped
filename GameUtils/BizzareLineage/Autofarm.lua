@@ -13,6 +13,8 @@ Autofarm.Distance = 100
 
 local function GetClosestTarget()
 	local Character = localPlayer.Character
+	local rootPart = Character:FindFirstChild("HumanoidRootPart")
+
 	local currentTarget = nil
 	local closestDistance = math.huge
 
