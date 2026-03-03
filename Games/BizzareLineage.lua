@@ -12,9 +12,12 @@ local rootPart = Character:FindFirstChild("HumanoidRootPart")
 local MainTab = window:Tab("Main")
 local AutoFarm = window:Tab("AutoFarm")
 
-AutoFarm:ToggleBind("Auto farm nearest", function(Enabled) end)
+AutoFarm:ToggleBind("Auto farm nearest", function(Enabled)
+	Autofarm.Enabled = Enabled
+end)
 
 MainTab:ToggleBind("Tp quest", Enum.KeyCode.Two, function()
+	local EffectsFolder = workspace.Effects
 	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
 	local hasInteracted = questbrick:GetAttribute("hasInteracted")
 	if questbrick and not hasInteracted then
