@@ -15,16 +15,6 @@ local SkillRemote = Character:FindFirstChild("client_character_controller"):Find
 local Autofarm = {}
 Autofarm.Enabled = false
 
-UserInputService.InputBegan:Connect(function(Input, GPE)
-	if GPE then
-		return
-	end
-
-	if Input.KeyCode == Enum.KeyCode.Two then
-		enabled = not enabled
-	end
-end)
-
 local function GetClosestTarget()
 	local currentTarget = nil
 	local closestDistance = math.huge

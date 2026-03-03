@@ -35,9 +35,9 @@ local FireArmSkills = AllSkills.FireArm
 local MiscSkills = AllSkills.Misc
 
 local SelectedSkills = {
-    Slot1 = nil,
-    Slot2 = nil,
-    Slot3 = nil
+	Slot1 = nil,
+	Slot2 = nil,
+	Slot3 = nil,
 }
 
 --------------------------Player Tab--------------------------
@@ -50,75 +50,75 @@ local WalkSpeedCon = nil
 local WalkSpeedValue = 16
 
 PlayerSection:ToggleInput("WalkSpeed", false, Enum.KeyCode.Unknown, function(state)
-    WalkSpeedEnabled = state
-    
-    local Character = lPlayer.Character
-    local humanoid = Character and Character:FindFirstChild("Humanoid")
+	WalkSpeedEnabled = state
 
-    if WalkSpeedEnabled then
-        WalkSpeedCon = RunService.RenderStepped:Connect(function()
-            humanoid.WalkSpeed = WalkSpeedValue
-        end)
-    else
-        if WalkSpeedCon then
-            WalkSpeedCon:Disconnect()
-            WalkSpeedCon = nil
-        end
+	local Character = lPlayer.Character
+	local humanoid = Character and Character:FindFirstChild("Humanoid")
 
-        humanoid.WalkSpeed = 16
-    end
+	if WalkSpeedEnabled then
+		WalkSpeedCon = RunService.RenderStepped:Connect(function()
+			humanoid.WalkSpeed = WalkSpeedValue
+		end)
+	else
+		if WalkSpeedCon then
+			WalkSpeedCon:Disconnect()
+			WalkSpeedCon = nil
+		end
+
+		humanoid.WalkSpeed = 16
+	end
 end)
 
 PlayerSection:Slider("Speed", 16, 150, 16, function(value)
-    WalkSpeedValue = value
+	WalkSpeedValue = value
 end)
 
 local FlyEnabled = false
 local FlySpeed = 16
 
 PlayerSection:ToggleInput("Fly", false, Enum.KeyCode.Unknown, function(state)
-    FlyEnabled = state
-    PlayerUtils.Fly(state, FlySpeed)
+	FlyEnabled = state
+	PlayerUtils.Fly(state, FlySpeed)
 end)
 
 PlayerSection:Slider("Fly Speed", 16, 350, 16, function(value)
-    FlySpeed = value
-    
-    if FlyEnabled then
-        PlayerUtils.Fly(true, FlySpeed)
-    end
+	FlySpeed = value
+
+	if FlyEnabled then
+		PlayerUtils.Fly(true, FlySpeed)
+	end
 end)
- 
+
 local NoclipEnabled = false
 local NoclipSpeed = 16
 PlayerSection:ToggleInput("NoClip Fly", false, Enum.KeyCode.Unknown, function(state)
-    NoclipEnabled = state
-    PlayerUtils.SetNoclip(state, NoclipSpeed)
+	NoclipEnabled = state
+	PlayerUtils.SetNoclip(state, NoclipSpeed)
 end)
 
 PlayerSection:Slider("No Clip Speed", 16, 350, 16, function(value)
-    NoclipSpeed = value
-    
-    if NoclipEnabled then
-        PlayerUtils.SetNoclip(true, NoclipSpeed)
-    end
+	NoclipSpeed = value
+
+	if NoclipEnabled then
+		PlayerUtils.SetNoclip(true, NoclipSpeed)
+	end
 end)
 
 --------------------------Combat Tab--------------------------
 CombatSection:Toggle("Auto Parry", function(state)
-    CombatModule.AutoParry(state)
+	CombatModule.AutoParry(state)
 end)
 
 CombatSection:Slider("Distance", 1, 150, 0, function(value)
-    CombatModule.ParryDistance = value
+	CombatModule.ParryDistance = value
 end)
 
 CombatSection:Toggle("No Dash CD", function(state)
-    CombatModule.NoDashCD(state)
+	CombatModule.NoDashCD(state)
 end)
 
 CombatSection:Toggle("No WallJump CD", function(state)
-    CombatModule.NoWallJumpCD(state)
+	CombatModule.NoWallJumpCD(state)
 end)
 
 -- CombatSection:Toggle("Bypass Skill Requirements (buggy)", function(state)
@@ -126,88 +126,91 @@ end)
 -- end)
 
 CombatSection:Toggle("Anti Grip Fling", function(state)
-    CombatModule.AntiFling(state)
+	CombatModule.AntiFling(state)
 end)
 
 CombatSection:Slider("Fling Power", 1, 100, 1, function(value)
-    CombatModule.FlingPower = value
+	CombatModule.FlingPower = value
 end)
 
 local WeaponType = CombatModule.GetWeaponType()
 local currentWeaponName = "None"
 if WeaponType then
-    currentWeaponName = WeaponType.Value
+	currentWeaponName = WeaponType.Value
 end
 local activeSkills = CombatModule.GetCurrentSkillList()
 
 local Slot1Dropdown = CombatSection:Dropdown("Skill Slot 1", MiscSkills, function(selected)
-    SelectedSkills.Slot1 = selected
+	SelectedSkills.Slot1 = selected
 end)
 
 local Slot2Dropdown = CombatSection:Dropdown("Skill Slot 2", MiscSkills, function(selected)
-    SelectedSkills.Slot2 = selected
+	SelectedSkills.Slot2 = selected
 end)
 
 local Slot3Dropdown = CombatSection:Dropdown("Skill Slot 3", MiscSkills, function(selected)
-    SelectedSkills.Slot3 = selected
+	SelectedSkills.Slot3 = selected
 end)
 
 local function UpdateSkillDropdowns()
-    local wep = WeaponType and WeaponType.Value or "None"
-    local newList = MiscSkills
-    
-    if wep == "Katana" then newList = KatanaSkills
-    elseif wep == "Fist" then newList = FistSkills
-    elseif wep == "Dagger" then newList = DaggerSkills
-    elseif wep == "FireArm" then newList = FireArmSkills
-end
+	local wep = WeaponType and WeaponType.Value or "None"
+	local newList = MiscSkills
 
-Slot1Dropdown:Refresh(newList)
-Slot2Dropdown:Refresh(newList)
-Slot3Dropdown:Refresh(newList)
+	if wep == "Katana" then
+		newList = KatanaSkills
+	elseif wep == "Fist" then
+		newList = FistSkills
+	elseif wep == "Dagger" then
+		newList = DaggerSkills
+	elseif wep == "FireArm" then
+		newList = FireArmSkills
+	end
+
+	Slot1Dropdown:Refresh(newList)
+	Slot2Dropdown:Refresh(newList)
+	Slot3Dropdown:Refresh(newList)
 end
 
 local weaponTypeLabel = CombatSection:Label("Current Weapon: " .. tostring(currentWeaponName))
 if WeaponType then
-    WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
-        weaponTypeLabel.Text = "Current Weapon: " .. tostring(WeaponType.Value)
-        UpdateSkillDropdowns()
-    end)
+	WeaponType:GetPropertyChangedSignal("Value"):Connect(function()
+		weaponTypeLabel.Text = "Current Weapon: " .. tostring(WeaponType.Value)
+		UpdateSkillDropdowns()
+	end)
 end
 UpdateSkillDropdowns()
 
 CombatSection:Bind("ForceSkill1", Enum.KeyCode.C, function()
-    if SelectedSkills.Slot1 then
-        CombatModule.ForceUseSkill(SelectedSkills.Slot1)
-    end
+	if SelectedSkills.Slot1 then
+		CombatModule.ForceUseSkill(SelectedSkills.Slot1)
+	end
 end)
 
 CombatSection:Bind("ForceSkill2", Enum.KeyCode.V, function()
-    if SelectedSkills.Slot2 then
-        CombatModule.ForceUseSkill(SelectedSkills.Slot2)
-    end
+	if SelectedSkills.Slot2 then
+		CombatModule.ForceUseSkill(SelectedSkills.Slot2)
+	end
 end)
 
 CombatSection:Bind("ForceSkill3", Enum.KeyCode.B, function()
-    if SelectedSkills.Slot3 then
-        CombatModule.ForceUseSkill(SelectedSkills.Slot3) 
-    end
+	if SelectedSkills.Slot3 then
+		CombatModule.ForceUseSkill(SelectedSkills.Slot3)
+	end
 end)
-
 
 --------------AutoFarm Tab ----------------
 
 local SelectedMission = nil
-AutofarmMissions:Dropdown("Mission", {"Cleanup Duty"}, function(selected: string)
-    SelectedMission = selected
+AutofarmMissions:Dropdown("Mission", { "Cleanup Duty" }, function(selected: string)
+	SelectedMission = selected
 end)
 
 AutofarmMissions:Toggle("Toggle Auto Farm", function(state)
-    MissionsModule.AutoFarmEnabled = state
-    
-    if state and SelectedMission then
-        MissionsModule.StartLoop(SelectedMission)
-    end
+	MissionsModule.AutoFarmEnabled = state
+
+	if state and SelectedMission then
+		MissionsModule.StartLoop(SelectedMission)
+	end
 end)
 
 -- local SelectedRaid = nil
@@ -221,60 +224,57 @@ end)
 --     end
 -- end)
 
-
 -------------------MISC TAB-------------------
 local MiscSection = MiscTab:Section("Misc")
 local ESPSection = MiscTab:Section("ESP")
 ESPSection:Toggle("Toggle ESP", function(state)
-    PlayerUtils.ToggleESP(state)
+	PlayerUtils.ToggleESP(state)
 end)
-
 
 local NpcNames = {}
 for _, entity in workspace.World.Dialog:GetChildren() do
-    if entity:IsA("Model") then
-        if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "TemptationModel" then
-            continue
-        end
-        
-        table.insert(NpcNames, entity.Name)
-    end
+	if entity:IsA("Model") then
+		if entity.Name == "VaultDoor" or entity.Name == "Surgery Kit" or entity.Name == "TemptationModel" then
+			continue
+		end
+
+		table.insert(NpcNames, entity.Name)
+	end
 end
 
 local selectedNpcName = nil
 local NpcDropdown = MiscSection:Dropdown("Npcs", NpcNames, function(selected)
-    selectedNpcName = selected
+	selectedNpcName = selected
 end)
 
 MiscSection:Button("Tp to Npc", function()
-    local Dialog = workspace.World.Dialog
-    if selectedNpcName then
-        local npcModel = Dialog:FindFirstChild(selectedNpcName)
-        if npcModel then
-            lPlayer.Character:PivotTo(npcModel:GetPivot() * CFrame.new(0, 3, 0))
-        end
-    end
+	local Dialog = workspace.World.Dialog
+	if selectedNpcName then
+		local npcModel = Dialog:FindFirstChild(selectedNpcName)
+		if npcModel then
+			lPlayer.Character:PivotTo(npcModel:GetPivot() * CFrame.new(0, 3, 0))
+		end
+	end
 end)
 
 MiscSection:Button("Open Blackmarket", function(state)
-    lPlayer.PlayerGui.Blackmarket.Enabled = not lPlayer.PlayerGui.Blackmarket.Enabled
+	lPlayer.PlayerGui.Blackmarket.Enabled = not lPlayer.PlayerGui.Blackmarket.Enabled
 end)
-
 
 -------------------SETTINGS TAB-------------------
 local SettingsSection = SettingsTab:Section("Settings")
 SettingsSection:Toggle("No Blur", function(state)
-    for _, v in Lighting:GetChildren() do
-        if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
-            if v.Name == "InventoryBlur" then
-                continue
-            end
+	for _, v in Lighting:GetChildren() do
+		if v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") then
+			if v.Name == "InventoryBlur" then
+				continue
+			end
 
-            v.Enabled = not state
-        end
-    end
+			v.Enabled = not state
+		end
+	end
 end)
 
 SettingsSection:Toggle("Fullbright", function(state)
-    PlayerUtils.Fullbright(state)
+	PlayerUtils.Fullbright(state)
 end)
