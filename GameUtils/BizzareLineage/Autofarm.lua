@@ -59,27 +59,42 @@ local keys = {
 	"C",
 }
 
-RunService.Heartbeat:Connect(function()
-	if not Autofarm.Enabled then
-		return
+local autofarmCon = nil
+function Autofarm.StartFarm(Enabled: boolean)
+	if autofarmCon then
+		autofarmCon:Disconnect()
+		autofarmCon = nil
 	end
 
-	local npc = GetClosestTarget()
+	if Enabled then
+		autofarmCon = RunService.Heartbeat:Connect(function()
+			if not Autofarm.Enabled then
+				return
+			end
 
-	if not npc or npc:GetAttribute("DisplayName") == "Hostage" then
-		return
+			local npc = GetClosestTarget()
+
+			if not npc or npc:GetAttribute("DisplayName") == "Hostage" then
+				return
+			end
+
+			local npcRootPart = npc.HumanoidRootPart
+			local targetPosition = (npcRootPart.CFrame * Options.Under).Position
+
+			rootPart.CFrame = CFrame.lookAt(targetPosition, npcRootPart.Position)
+
+			if M1Remote then
+				M1Remote:FireServer(true, true)
+
+				SkillRemote:FireServer(keys[math.random(1, #keys)], true)
+			end
+		end)
+	else
+		if autofarmCon then
+			autofarmCon:Disconnect()
+			autofarmCon = nil
+		end
 	end
-
-	local npcRootPart = npc.HumanoidRootPart
-	local targetPosition = (npcRootPart.CFrame * Options.Under).Position
-
-	rootPart.CFrame = CFrame.lookAt(targetPosition, npcRootPart.Position)
-
-	if M1Remote then
-		M1Remote:FireServer(true, true)
-
-		SkillRemote:FireServer(keys[math.random(1, #keys)], true)
-	end
-end)
+end
 
 return Autofarm
