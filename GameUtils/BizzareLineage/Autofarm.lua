@@ -44,9 +44,13 @@ local function GetClosestTarget()
 		end
 
 		local humanoid = npc:FindFirstChild("Humanoid")
+		local npcRootPart = npc.HumanoidRootPart
+
+		if npcRootPart.Position.Y < workspace.FallenPartsDestroyHeight + 50 then
+			continue
+		end
 
 		if humanoid and humanoid.Health > 0 then
-			local npcRootPart = npc.HumanoidRootPart
 			local distance = (rootPart.Position - npcRootPart.Position).Magnitude
 
 			if distance < closestDistance then
@@ -105,7 +109,20 @@ function Autofarm.StartFarm(Enabled: boolean)
 			end
 
 			if isnetworkowner(npcRoot) then
-				humanoid.Health = 0
+				for _, obj in npc:GetDescendants() do
+					if obj:IsA("JointInstance") then
+						if
+							(obj.Part0 and obj.Part0:IsDescendantOf(char))
+							or (obj.Part1 and obj.Part1:IsDescendantOf(char))
+						then
+							obj:Destroy()
+						end
+					end
+				end
+
+				local voidY = workspace.FallenPartsDestroyHeight - 50
+				npcRoot.CFrame = CFrame.new(npcRoot.Position.X, voidY, npcRoot.Position.Z)
+				npcRoot.AssemblyLinearVelocity = Vector3.new(0, -5000, 0)
 			else
 				local targetPos = (npcRoot.CFrame * Options.Under).Position
 				rootPart.CFrame = CFrame.lookAt(targetPos, npcRoot.Position)
