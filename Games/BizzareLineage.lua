@@ -20,12 +20,21 @@ AutoFarmSection:ToggleInput("Auto farm nearest", false, Enum.KeyCode.Two, functi
 end)
 
 AutoFarmSection:Bind("Tp to quest", Enum.KeyCode.Three, function()
-	local EffectsFolder = workspace.Effects
-	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
-	local hasInteracted = questbrick:GetAttribute("hasInteracted") or false
+	local char = localPlayer.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
 
-	if questbrick and not hasInteracted then
-		rootPart.CFrame = questbrick:GetPivot()
-		questbrick:SetAttribute("hasInteracted", true)
+	if not root then
+		return
+	end
+
+	local EffectsFolder = workspace.Effects
+	local questbrick = EffectsFolder:FindFirstChild("questbrick")
+
+	if questbrick then
+		local hasInteracted = questbrick:GetAttribute("hasInteracted") or false
+		if not hasInteracted then
+			root.CFrame = questbrick:GetPivot()
+			questbrick:SetAttribute("hasInteracted", true)
+		end
 	end
 end)

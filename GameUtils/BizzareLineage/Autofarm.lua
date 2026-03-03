@@ -3,20 +3,16 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 local localPlayer = Players.LocalPlayer
-local Character = localPlayer.Character
-local rootPart = Character:FindFirstChild("HumanoidRootPart")
 
 local LiveFolder = workspace.Live
 local Npcs = {}
-
-local M1Remote = Character:FindFirstChild("client_character_controller"):FindFirstChild("M1")
-local SkillRemote = Character:FindFirstChild("client_character_controller"):FindFirstChild("Skill")
 
 local Autofarm = {}
 Autofarm.Enabled = false
 Autofarm.Distance = 100
 
 local function GetClosestTarget()
+	local Character = localPlayer.Character
 	local currentTarget = nil
 	local closestDistance = math.huge
 
@@ -66,11 +62,15 @@ function Autofarm.StartFarm(Enabled: boolean)
 		autofarmCon:Disconnect()
 		autofarmCon = nil
 	end
-
 	if Enabled then
 		autofarmCon = RunService.Heartbeat:Connect(function()
-			local npc = GetClosestTarget()
+			local Character = localPlayer.Character
 
+			local M1Remote = Character:FindFirstChild("client_character_controller"):FindFirstChild("M1")
+			local SkillRemote = Character:FindFirstChild("client_character_controller"):FindFirstChild("Skill")
+			local rootPart = Character:FindFirstChild("HumanoidRootPart")
+
+			local npc = GetClosestTarget()
 			if not npc or npc:GetAttribute("DisplayName") == "Hostage" or npc.Name == "Server" then
 				return
 			end
