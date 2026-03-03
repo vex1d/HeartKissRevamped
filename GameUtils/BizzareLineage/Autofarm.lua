@@ -11,6 +11,22 @@ local Autofarm = {}
 Autofarm.Enabled = false
 Autofarm.Distance = 100
 
+local isnetworkowner = function(BasePart)
+	if not BasePart or not BasePart:IsA("BasePart") then
+		return false
+	end
+	if not gethiddenproperty then
+		return false
+	end
+
+	local function GetID(Instance)
+		return gethiddenproperty(Instance, "NetworkOwnerV3")
+	end
+
+	local myID = GetID(localPlayer.Character:FindFirstChild("HumanoidRootPart"))
+	return myID == GetID(BasePart)
+end
+
 local function GetClosestTarget()
 	local Character = localPlayer.Character
 	local rootPart = Character:FindFirstChild("HumanoidRootPart")
@@ -66,26 +82,43 @@ function Autofarm.StartFarm(Enabled: boolean)
 	end
 	if Enabled then
 		autofarmCon = RunService.Heartbeat:Connect(function()
-			local Character = localPlayer.Character
-
-			local M1Remote = Character:FindFirstChild("client_character_controller"):FindFirstChild("M1")
-			local SkillRemote = Character:FindFirstChild("client_character_controller"):FindFirstChild("Skill")
-			local rootPart = Character:FindFirstChild("HumanoidRootPart")
-
-			local npc = GetClosestTarget()
-			if not npc or npc:GetAttribute("DisplayName") == "Hostage" or npc.Name == "Server" then
+			local char = localPlayer.Character
+			if not char then
 				return
 			end
 
-			local npcRootPart = npc.HumanoidRootPart
-			local targetPosition = (npcRootPart.CFrame * Options.Under).Position
+			local rootPart = char:FindFirstChild("HumanoidRootPart")
+			local controller = char:FindFirstChild("client_character_controller")
+			if not rootPart or not controller then
+				return
+			end
 
-			rootPart.CFrame = CFrame.lookAt(targetPosition, npcRootPart.Position)
+			local npc = GetClosestTarget()
+			if not npc or npc.Name == "Server" then
+				return
+			end
 
-			if M1Remote then
-				M1Remote:FireServer(true, true)
+			local humanoid = npc:FindFirstChild("Humanoid")
+			local npcRoot = npc:FindFirstChild("HumanoidRootPart")
+			if not humanoid or not npcRoot then
+				return
+			end
 
-				SkillRemote:FireServer(keys[math.random(1, #keys)], true)
+			if isnetworkowner(npcRoot) then
+				humanoid.Health = 0
+			else
+				local targetPos = (npcRoot.CFrame * Options.Under).Position
+				rootPart.CFrame = CFrame.lookAt(targetPos, npcRoot.Position)
+
+				local m1 = controller:FindFirstChild("M1")
+				local skill = controller:FindFirstChild("Skill")
+
+				if m1 then
+					m1:FireServer(true, true)
+					if math.random(1, 5) == 1 then
+						skill:FireServer(keys[math.random(1, #keys)], true)
+					end
+				end
 			end
 		end)
 	else
