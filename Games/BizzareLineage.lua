@@ -10,13 +10,16 @@ local Character = localPlayer.Character
 local rootPart = Character:FindFirstChild("HumanoidRootPart")
 
 local MainTab = window:Tab("Main")
-local AutoFarm = window:Tab("AutoFarm")
+local AutoFarmTab = window:Tab("AutoFarm")
+
+local AutoFarm = AutoFarmTab:Section("AutoFarm")
+local MainSection = MainTab:Section("Main")
 
 AutoFarm:ToggleBind("Auto farm nearest", function(Enabled)
 	Autofarm.Enabled = Enabled
 end)
 
-MainTab:ToggleBind("Tp quest", Enum.KeyCode.Two, function()
+MainSection:ToggleBind("Tp quest", Enum.KeyCode.Two, function()
 	local EffectsFolder = workspace.Effects
 	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
 	local hasInteracted = questbrick:GetAttribute("hasInteracted")
