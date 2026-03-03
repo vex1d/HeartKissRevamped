@@ -14,6 +14,7 @@ local SkillRemote = Character:FindFirstChild("client_character_controller"):Find
 
 local Autofarm = {}
 Autofarm.Enabled = false
+Autofarm.Distance = 100
 
 local function GetClosestTarget()
 	local currentTarget = nil
