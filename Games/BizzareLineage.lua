@@ -19,7 +19,7 @@ AutoFarmSection:ToggleInput("Auto farm nearest", false, Enum.KeyCode.Two, functi
 	AutofarmModule.StartFarm(Enabled)
 end)
 
-AutoFarmSection:ToggleBind("Tp to quest", Enum.KeyCode.Three, function()
+AutoFarmSection:Bind("Tp to quest", Enum.KeyCode.Three, function()
 	local EffectsFolder = workspace.Effects
 	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
 	local hasInteracted = questbrick:GetAttribute("hasInteracted") or false
