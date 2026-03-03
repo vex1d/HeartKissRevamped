@@ -1,6 +1,6 @@
 local Players = game:GetService("Players")
 
-local Autofarm = require("GameUtils/BizzareLineage/Autofarm")
+local AutofarmModule = require("GameUtils/BizzareLineage/Autofarm")
 
 local Lib = require("GUI/Library")
 local window = Lib.new("HeartKiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
@@ -12,11 +12,11 @@ local rootPart = Character:FindFirstChild("HumanoidRootPart")
 local MainTab = window:Tab("Main")
 local AutoFarmTab = window:Tab("AutoFarm")
 
-local AutoFarm = AutoFarmTab:Section("AutoFarm")
+local AutoFarmSection = AutoFarmTab:Section("AutoFarm")
 local MainSection = MainTab:Section("Main")
 
-AutoFarm:ToggleInput("Auto farm nearest", Enum.KeyCode.Three, function(Enabled)
-	Autofarm.StartFarm(Enabled)
+AutoFarmSection:ToggleInput("Auto farm nearest", Enum.KeyCode.Three, function(Enabled)
+	AutofarmModule.StartFarm(Enabled)
 end)
 
 MainSection:ToggleInput("Tp to quest", Enum.KeyCode.Two, function()
