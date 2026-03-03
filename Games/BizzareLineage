@@ -1,0 +1,24 @@
+local Players = game:GetService("Players")
+
+local Autofarm = require("GameUtils/BizzareLineage/Autofarm")
+
+local Lib = require("GUI/Library")
+local window = Lib.new("HeartKiss", UDim2.fromScale(488, 518), Enum.KeyCode.RightControl)
+
+local localPlayer = Players.LocalPlayer
+local Character = localPlayer.Character
+local rootPart = Character:FindFirstChild("HumanoidRootPart")
+
+local MainTab = window:Tab("Main")
+local AutoFarm = window:Tab("AutoFarm")
+
+AutoFarm:ToggleBind("Auto farm nearest", function(Enabled) end)
+
+MainTab:ToggleBind("Tp quest", Enum.KeyCode.Two, function()
+	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
+	local hasInteracted = questbrick:GetAttribute("hasInteracted")
+	if questbrick and not hasInteracted then
+		rootPart.CFrame = questbrick:GetPivot()
+		questbrick:SetAttribute("hasInteracted", true)
+	end
+end)
