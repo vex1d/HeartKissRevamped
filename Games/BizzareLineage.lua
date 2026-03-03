@@ -23,12 +23,9 @@ AutoFarmSection:Bind("Tp to quest", Enum.KeyCode.Three, function()
 	local EffectsFolder = workspace.Effects
 	local questbrick = EffectsFolder:WaitForChild("questbrick", 10)
 	local hasInteracted = questbrick:GetAttribute("hasInteracted") or false
+
 	if questbrick and not hasInteracted then
 		rootPart.CFrame = questbrick:GetPivot()
 		questbrick:SetAttribute("hasInteracted", true)
 	end
-end)
-
-AutoFarmSection:Slider("Distance", 1, 1500000000, 0, function(value)
-	AutofarmModule.Distance = value
 end)
