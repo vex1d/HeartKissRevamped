@@ -71,7 +71,7 @@ function Autofarm.StartFarm(Enabled: boolean)
 		autofarmCon = RunService.Heartbeat:Connect(function()
 			local npc = GetClosestTarget()
 
-			if not npc or npc:GetAttribute("DisplayName") == "Hostage" then
+			if not npc or npc:GetAttribute("DisplayName") == "Hostage" or npc.Name == "Server" then
 				return
 			end
 
