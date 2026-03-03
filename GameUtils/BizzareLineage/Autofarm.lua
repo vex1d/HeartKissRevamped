@@ -84,6 +84,18 @@ function Autofarm.StartFarm(Enabled: boolean)
 		autofarmCon:Disconnect()
 		autofarmCon = nil
 	end
+
+	if not Enabled then
+		local char = localPlayer.Character
+		if char and char:FindFirstChild("HumanoidRootPart") then
+			local float = char.HumanoidRootPart:FindFirstChild("AutofarmFloat")
+			if float then
+				float:Destroy()
+			end
+		end
+		return
+	end
+
 	if Enabled then
 		autofarmCon = RunService.Heartbeat:Connect(function()
 			local char = localPlayer.Character
@@ -97,8 +109,20 @@ function Autofarm.StartFarm(Enabled: boolean)
 				return
 			end
 
+			local float = rootPart:FindFirstChild("AutofarmFloat")
+			if not float then
+				float = Instance.new("BodyVelocity")
+				float.Name = "AutofarmFloat"
+				float.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+				float.Velocity = Vector3.zero
+				float.Parent = rootPart
+			end
+
+			rootPart.AssemblyLinearVelocity = Vector3.zero
+			rootPart.AssemblyAngularVelocity = Vector3.zero
+
 			local npc = GetClosestTarget()
-			if not npc or npc.Name == "Server" then
+			if not npc or npc.Name == "Server" or npc:GetAttribute("DisplayName") == "Hostage" then
 				return
 			end
 
@@ -138,11 +162,6 @@ function Autofarm.StartFarm(Enabled: boolean)
 				end
 			end
 		end)
-	else
-		if autofarmCon then
-			autofarmCon:Disconnect()
-			autofarmCon = nil
-		end
 	end
 end
 
